@@ -1,0 +1,27 @@
+body{
+  background:#fbfbfb;
+  color:#555;
+}
+
+.top-wrapper{
+  border-bottom:1px solid #ccc;
+  background:#ccc;
+  position:relative;
+  height:110px;
+}
+
+.top-header{
+  margin:10px 5px;  
+}
+
+#wrapper {
+   margin:0px auto;
+   background:#fff; 
+   border:1px solid:#ccc;   
+   width:980px;
+   min-height:600px!important;
+}
+
+.canvas-wrapper{
+  padding:10px;
+}
