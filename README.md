@@ -6,6 +6,7 @@ Introduction
 
 Flubber is a light weight flexible framework based on MVC design pattern. It is designed from ground-up. 
 
+
 Its designed to be 
  
  * **Compact**: Basic skeliton is ~300kb 
@@ -23,8 +24,11 @@ Its designed to be
  * **Customizable**: Highly customizable because of less dependency
  
  * **Extendable**: Extend the behaviour of the app with easy Extensions or build your own extensions.
- 
 
+
+ visit [http://flubbermvc.com](http://flubbermvc.com) for more info and demo
+ 
+ 
 -----------------------------------
 
 
