@@ -11,6 +11,16 @@
  *  
  */
 
+  
+  /*  SQL driver
+   *  -----------------------------------
+   *  Options
+   *  1. MYSQL : default MySQL API driver  
+   *  2. PDO   : PHP Data Objects lightweight driver
+   *  
+   */ 
+  define('SQLDRIVER', 'MYSQL');  
+  
   // DB configuration    
   define('DBHOST', 'YOUR_HOST');
   define('DBUSER', 'YOUR_USER');
