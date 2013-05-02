@@ -21,7 +21,7 @@ class lib extends datastore
    */ 
   public $page_meta_info = array
   (
-    "page_title"       => "Welcome | .",
+    "page_title"       => "Welcome ",
     "page_description" => "This is default page description"    
   );
 
@@ -30,8 +30,7 @@ class lib extends datastore
    */  
   function __construct($dbname = DBNAME)
   {
-    $this->connection = mysql_connect(DBHOST, DBUSER, DBPASS);
-    $this->set_database( $dbname );
+    parent::__construct();        
   }
   
   /*
