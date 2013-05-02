@@ -21,7 +21,7 @@ class lib extends datastore
    */ 
   public $page_meta_info = array
   (
-    "page_title"       => "Welcome ",
+    "page_title"       => "Welcome Guest",
     "page_description" => "This is default page description"    
   );
 
