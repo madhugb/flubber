@@ -91,13 +91,32 @@ class controller extends lib
   } 
 
   /*
-   *  Take action according to appropriate case
+   *  "take_action" is the key to the entire framework. Here, based on the _action requested by the 
+   *  client, you will do the following:
+   * 
+   *  1. Create the model from where data will come. $mod = $this->getmodel('<modelname>')
+   *  2. Get the data: $data = $mod->mydatafunction(request)
+   *  3. Get a view based upon the data. $view = $this->getview($data). This will initialize the display content .
+   *  4. Push the HTML to the browser. return $view->show_page(<templatename>)
+   *  
+   *  Please note that you must create a <modelname>.php file with class = <modelname>
+   *  You should also have a template called <templatename>.php
+   *  
+   *  `mydatafunction` must return an array of format: array('result'=>'success', <data>=><dataarray>)
+   *                                                                 ------or------
+   *                                                   array('result'=>'failure', 'message'=> <your error message>)
+   *  The variable name <data> can be accessed from the template <templatename>.
    */ 
+  
   function take_action()
-  {
+  { 
     switch( $this->_action )
-    {    
-      case 'home':
+    { 
+	  case 'home':
+	    $mod = $this->getmodel('sample_model');
+	    $mod_date = $mod->test_function($this->_request);
+	    $view = $this->getview($mod_date);
+	    return $view->show_page('home');
       default:      
         $view =  $this->getview();
         return $view->show_page('home');                    

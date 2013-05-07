@@ -89,8 +89,8 @@ class lib extends datastore
    */
   function check_reg($rule, $str)
   {
-    global $parmalinks;
-    preg_match($parmalinks[$rule],$str, $match);
+    global $permalinks;
+    preg_match($permalinks[$rule],$str, $match);
     if (isset($match[0]))
       return $match[0];
     return false;    
@@ -101,14 +101,15 @@ class lib extends datastore
    */ 
   function get_action_data($url = null)
   {
-    global $parmalinks, $link_args;
+    global $permalinks, $link_args;
     $matches = false;
     if ( $url == null )
       $url = $this->get_request_params();
-    
-    foreach( $parmalinks as $id => $reg )
+    //logger("url",$url);
+    foreach( $permalinks as $id => $reg )
     {      
-      preg_match($reg, $url, $matches);      
+      preg_match($reg, $url, $matches);    
+      logger($reg,$url,$matches);  
       if ( $matches )
       {        
         $vars = $link_args[$id];        
