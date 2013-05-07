@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <meta name="description" content="Flubber : Framework " />
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>Flubber</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/madhugb/flubber">View on GitHub</a>
+
+          <h1 id="project_title">Flubber</h1>
+          <h2 id="project_tagline">Framework </h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/madhugb/flubber/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/madhugb/flubber/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h1>Flubber</h1>
+
+<h2>Introduction</h2>
+
+<p>Flubber is a light weight flexible framework based on MVC design pattern. It is designed from ground-up. </p>
+
+<p>Its designed to be </p>
+
+<ul>
+<li><p><strong>Compact</strong>: Basic skeliton is ~300kb </p></li>
+<li><p><strong>Scalable</strong>: Database scheme, CDN support</p></li>
+<li><p><strong>Easy to deploy</strong>: No installation required, just copy-paste</p></li>
+<li><p><strong>Multi Purpose</strong>: Design wide range of apps starting from Todo, CMS to a sophisticated web product</p></li>
+<li><p><strong>Multiple platforms</strong>: Multi platform support built-in</p></li>
+<li><p><strong>Localized</strong>: Localization is built-in </p></li>
+<li><p><strong>Customizable</strong>: Highly customizable because of less dependency</p></li>
+<li>
+<p><strong>Extendable</strong>: Extend the behaviour of the app with easy Extensions or build your own extensions.</p>
+
+<p>visit <a href="http://flubbermvc.com">http://flubbermvc.com</a> for more info and demo</p>
+</li>
+</ul><hr><p><strong>Note</strong>: It may not be simple to understand entire framework, its still under constant iterations. So It may look like its not developer friendly. There are many aspects of Framework which are missing, like exception handling, refined template design.  </p>
+
+<hr><h2>Architecture</h2>
+
+<p>There are different sides to Flubber. You can customize it to behave in different ways according to your requirements.</p>
+
+<ul>
+<li><p><strong>Server heavy</strong>: Simple Template based html rendering. Ideal if you want to keep all decisions on server side.</p></li>
+<li><p><strong>Client heavy</strong>: jQuery based single page application. In client heavy applications, you create dynamic pages which are rendered on the fly by jQuery.
+                 It allows you to create highly interactive applications which run extremely fast.</p></li>
+<li><p><strong>Mixed</strong>: Use Template based rendering with jQuery for UX enhancement. </p></li>
+</ul><p>Its very important to understand the individual components of the framework to customize it according to your needs.</p>
+
+<p>But before that let us look at the directory structure</p>
+
+<pre><code> &lt;your-app-folder&gt;
+   |
+   |----- app/
+   |       |
+   |       |----- config/
+   |       |        |
+   |       |        |----- locale/
+   |       |        |        |
+   |       |        |        |----- en.inc     
+   |       |        |        :
+   |       |        |        :
+   |       |        |        |----- some-language.inc       
+   |       |        |
+   |       |        |----- config.inc
+   |       |        |
+   |       |        |----- locale.inc
+   |       |        |
+   |       |        |----- settings.inc
+   |       |        |
+   |       |        |----- urls.inc
+   |       |        
+   |       |----- controller/
+   |       |        |
+   |       |        |----- controller.inc       
+   |       | 
+   |       |----- model/
+   |       |        |
+   |       |        |----- model-a.inc
+   |       |        :
+   |       |        :
+   |       |        |----- model-n.inc
+   |       |
+   |       |----- view/
+   |       |        |
+   |       |        |----- templates/
+   |       |        |         |
+   |       |        |         |----- template-a.php
+   |       |        |         :
+   |       |        |         :
+   |       |        |         |----- template-n.php
+   |       |        |       
+   |       |        |----- view.inc       
+   |       |
+   |       |----- app.inc
+   |
+   |----- db/
+   |
+   |----- html/
+   |       |    
+   |       |----- css/
+   |       |       |    
+   |       |       |----- basic.css
+   |       |       |
+   |       |       |----- styles.css
+   |       |       :
+   |       |       :
+   |       |       |----- custom-css.css         
+   |       |
+   |       |----- images/
+   |       |    
+   |       |----- js/
+   |       |       |    
+   |       |       |----- app.js
+   |       |       | 
+   |       |       |----- jquery.js
+   |       |    
+   |       |----- index.php    
+   |       |
+   |       |----- .htaccess    
+   |       
+   |----- lib/
+   |       |    
+   |       |----- datastore/
+   |       |       |     
+   |       |       |----- datastore.inc
+   |       |    
+   |       |----- functions.inc
+   |       |    
+   |       |----- lib.inc
+</code></pre>
+
+<h2>A Todo App</h2>
+
+<p>It is recommended to create a simple Todo app using Flubber, to understand the basic understanding of it.</p>
+
+<p><strong>Database</strong></p>
+
+<p>Create a <code>todo</code> database and create todo table as shown below</p>
+
+<pre><code> CREATE TABLE todo 
+ (
+   `id`          bigint(11) primary key auto_increment,
+   `created`     datetime,
+   `modified`    datetime,
+   `title`       varchar(512),
+   `description` text,
+   `status`      enum('PENDING','COMPLETED')
+ );
+</code></pre>
+
+<p><strong>Config</strong></p>
+
+<p>Open <code>app/config/settings.inc</code> file and change it like below</p>
+
+<pre><code> &lt;?php  
+
+   define('DBHOST', 'localhost');   /* your db host name */
+   define('DBUSER', 'MY_DB_USER');  /* your db user name */
+   define('DBPASS', 'MY_PASS');     /* your db password */
+   define('DBNAME', 'todo');        /* your database name */      
+
+ ?&gt;
+</code></pre>
+
+<p><strong>URLs</strong></p>
+
+<p>There should be a URL for our Todo app, so lets create required urls. </p>
+
+<p>Open <code>app/config/urls.inc</code> file and add the following urls</p>
+
+<pre><code> &lt;?php
+
+  $parmalinks = array
+  (
+    ...
+
+    "todo_list" =&gt; "/todo$/i"
+
+  );
+
+  $link_args = array
+  (
+    ...
+
+    "todo_list" =&gt; array("_action"=&gt;"list_todo")
+  );
+
+ ?&gt;
+</code></pre>
+
+<p><strong>Model</strong></p>
+
+<p>For our Todo app to work you need a model. Here is how you do it.
+ Create a file named <code>todo.inc</code> in <code>app/model/</code> which contains the following code.</p>
+
+<pre><code> &lt;?php
+
+  // Include library      
+  include_once LIB_PATH. 'lib.inc';
+
+  // Todo is the name of our model
+  class todo extends lib
+  {
+    function __construct()
+    {
+
+    }
+  }
+
+ ?&gt;
+</code></pre>
+
+<p>Create a function <code>get_tasks</code></p>
+
+<pre><code>public function get_tasks( $request )
+{
+  /* 
+    Query to get from todo table that we created above         
+  */
+  $tasks_query = sprintf("select * from todo order by status ASC, id DESC");
+
+  /* Fetch from database */
+  $tasks_list  = $this-&gt;dbfetch( $tasks_query );
+
+  /*
+    return the result to controller
+    remember its mandatory to send `result` as success or failure
+    `data` contains actual response.
+  */
+
+  $result      = array( 'result' =&gt; 'success', 
+                        'data'   =&gt; $tasks_list );
+  return $result;
+}
+</code></pre>
+
+<p>We can add multiple functions for our Todo list like below</p>
+
+<p><em>create a new task</em>:</p>
+
+<pre><code>public function create_task($request)
+{
+    $data = $request['post'];
+    $created = date("Y-m-d H:i:s");
+    $task_query = sprintf("insert into todo(`title`,`status`,`created`) values('%s','PENDING','%s')", 
+        $data['task_title'],$created);     
+    $res = $this-&gt;execquery( $task_query );
+    if ($res)
+    {
+      array( 'result' =&gt; 'success', 'data' =&gt; $res );
+    }
+    else
+      array( 'result' =&gt; 'failure', 'message' =&gt; _s('cannot_create_task') );
+}
+</code></pre>
+
+<p><em>update an existing task</em></p>
+
+<pre><code>public function update_task($request)
+{
+    $data = $request['post'];
+    $field = '';
+    if (isset($data['status']))
+        $field = sprintf("`status`='%s'", $data['status']);     
+    $task_query = sprintf("update todo set %s where id=%s",
+        $field, $data['task_id']);     
+    $res = $this-&gt;execquery( $task_query );
+    if ($res)
+    {
+       array( 'result' =&gt; 'success');
+    }
+    else
+    {
+       array( 'result' =&gt; 'failure', 
+              'message' =&gt; _s('cannot_create_task') );
+    }
+}
+</code></pre>
+
+<p><strong>View</strong></p>
+
+<p>Now lets create a <code>view</code> to display our <code>tasks</code>
+To create a <code>view</code> we need to create a <code>template</code> file </p>
+
+<p>Create a file <code>todo_list.php</code> in <code>app/view/templates/</code> and add the following contents..</p>
+
+<pre><code>&lt;div class="row-fluid"&gt;
+    &lt;div class="span12"&gt;  
+        &lt;!-- _s function is a PHP function to render strings in multiple languages --&gt;
+        &lt;h1&gt;&lt;? echo _s('todo_list_header'); ?&gt;&lt;/h1&gt;
+
+        &lt;div class="row-fluid"&gt;
+
+          &lt;!-- New task block --&gt;
+          &lt;div class="row-fluid"&gt;
+              &lt;div class="span8"&gt;
+                  &lt;input class="new-task-text" type="textbox" id="new-task-text" autocomplete="off" /&gt;
+              &lt;/div&gt;        
+              &lt;div class="span4"&gt;
+                  &lt;input type="button" id="create-task" value="Create"&gt;
+              &lt;/div&gt;        
+          &lt;/div&gt;
+          &lt;!-- New task block ends --&gt;
+
+          &lt;!-- Empty task message block --&gt;
+          &lt;? 
+          if (count($data) == 0)
+          {
+          ?&gt;
+          &lt;h3&gt;&lt;? echo _s('empty_tasks_list_message');?&gt;&lt;/h3&gt;                  
+          &lt;!-- Empty task message block ends --&gt;
+
+          &lt;!-- tasks list block --&gt;
+          &lt;?
+          }
+          else        
+          {    
+          ?&gt;
+          &lt;!--  All done message --&gt;
+          &lt;?
+              $counter = 0;          
+              foreach($data as $task)
+              {
+                  $counter += ($task['status'] == 'COMPLETED' ? 1: 0);
+              }
+          ?&gt;
+          &lt;?
+              if($counter == count($data))
+              {
+          ?&gt;
+          &lt;h3&gt; &lt;? echo _s('all_tasks_done_message');?&gt; &lt;/h3&gt;
+          &lt;!--  All done message ends--&gt;
+          &lt;?}?&gt;                 
+          &lt;!--  list of tasks --&gt;
+          &lt;form name="todo-list&lt;?echo mktime();?&gt;"&gt;
+          &lt;?
+            foreach($data as $task)
+            {
+          ?&gt;
+              &lt;div class="row-fluid todo-row" id="row-&lt;? echo $task['id']; ?&gt;"&gt;
+                  &lt;div class="span12"&gt;
+                      &lt;input id="task-&lt;? echo $task['id']; ?&gt;" class="complete-task" type="checkbox" &lt;? echo ($task['status'] == 'COMPLETED' ? 'checked="checked"' : ''); ?&gt; /&gt;
+                      &lt;span class="task-name &lt;?echo ($task['status'] == 'COMPLETED' ? 'task-done': ''); ?&gt;"&gt;
+                          &lt;? echo $task['title']; ?&gt;
+                      &lt;/span&gt;
+                  &lt;/div&gt;
+              &lt;/div&gt;              
+          &lt;?}
+          }
+          ?&gt;
+          &lt;/form&gt;
+          &lt;!-- tasks list block ends--&gt;
+        &lt;/div&gt;    
+    &lt;/div&gt;  
+&lt;/div&gt;
+</code></pre>
+
+<p>In the template above you can see the PHP code inside HTML template.</p>
+
+<p>Response contains <code>result</code> and <code>data</code> here we will be using <code>data</code> which is nothing but the list of todo tasks from our model.</p>
+
+<p>In the <em>controller</em> section you will see how to pass this value to view.</p>
+
+<p><strong>Localization</strong> </p>
+
+<p>We can render our Todo app in multiple languages, see the <code>_s()</code> function call inside the template, passed string will be replaced by the appropriate string of the current language ( by default English). However this is not mandatory, we can use plain strings anywhere in the HTML code.   </p>
+
+<p>Lets add some strings that we mentioned in above template.</p>
+
+<p>open <code>app/config/locale/en.inc</code> and add the following string.</p>
+
+<pre><code>&lt;?php
+    $strings = array
+    (    
+        ...
+
+        "todo_list_header" =&gt; "My Todo List",
+
+        "empty_tasks_list_message" =&gt; "It seems that you just stated organizing yourself.. Creat tasks now!!",
+
+        "all_tasks_done_message" =&gt; " Everything is done, Good job!!",
+
+        "cannot_create_task" =&gt; "Oops, Failed to add your Task, Try again.."
+        ...
+    );
+?&gt;
+</code></pre>
+
+<p>We can create our own file for language support in the same format. Set the language just by calling <code>set_locale()</code> anywhere in the application. We can also change it in <code>config.inc</code>.</p>
+
+<p><strong>Controller</strong></p>
+
+<p>Like in any <em>MVC design pattern</em>, without <code>Controller</code> application cannot do anything. To render any view or to request any model, we need to add a controller condition. In <strong>Flubber</strong>, controller checks the <code>_action</code> key in the request and based on which it takes decission.</p>
+
+<p>Lets add multiple conditions inside <code>take_action</code> function to do operations like <em>list</em>, <em>create</em>,*update* </p>
+
+<p>Open <code>app/controller/controller.inc</code> and add the below conditions inside the switch condition.</p>
+
+<pre><code>function take_action()
+{
+    switch( $this-&gt;_action )
+    {                
+        ...            
+
+        /*
+          Get the list of tasks in todo
+        */
+        case 'todo_list':
+            /* Get model Object */
+            $model = $this-&gt;getmodel('todo');
+            /* Call appropriate function */
+            $data  = $model-&gt;get_tasks($this-&gt;_request); 
+
+            /* Pass data to view */
+            $view =  $this-&gt;getview($data);
+            /* Render page to client */
+            return $view-&gt;show_page('todo_list');
+        break;
+
+        /*
+          Add a new task to todo
+        */
+        case 'new_task':
+            $model = $this-&gt;getmodel('todo');
+            $data  = $model-&gt;create_task($this-&gt;_request);
+            /*
+              Donot print the page, return the array
+              this will be returned as JSON response
+            */
+            return $data;        
+        break;
+
+        /*
+          Update a task in todo
+        */
+        case 'update_task':
+            $model = $this-&gt;getmodel('todo');
+            $data  = $model-&gt;update_task($this-&gt;_request);
+            return $data;        
+        break;
+
+        ...
+    }
+}
+</code></pre>
+
+<h2>Client-side</h2>
+
+<p>So far we have done the following things:</p>
+
+<ul>
+<li>Changing configuration </li>
+<li>Connecting your database to Flubber</li>
+<li>Creating URLs</li>
+<li>Creating Todo Model </li>
+<li>Adding new Template for view</li>
+<li>Localization </li>
+<li>Linking all to add a condition in Controller</li>
+</ul><p>But its not done yet, In this we cannot add any new todo list or mark a task as done. To add these functionality lets jump into Client side. </p>
+
+<p>Flubber comes with a Client side library, which in itself is a micro framework written using jQuery. It is so powerful that we can easily create a single page application without server side  templates, Its so simple that we can create a UX enhancement for every page of our application. </p>
+
+<p>This is inspired by <a href="http://www.bennadel.com">Ben Nadel</a>'s plugin design for Single page application development using jQuery. </p>
+
+<p>Here is a simple example of a Home page plugin </p>
+
+<pre><code>/*
+ *  Home Page plugin     
+ */     
+window.application.addClass('home',(function($,app) {  
+
+    function Home() {    
+       // global class variables
+    };      
+
+    // This function will be invoked first.
+    Home.prototype.init = function() {
+        var self = this;
+        alert('Hello Welcome!!');
+    };
+    // return an instance of the Home class.
+    return (new Home());    
+
+})(jQuery, window.application));
+</code></pre>
+
+<p>and here is how we tell jQuery app to load home plugin, by using  <code>PAGE</code> variable ( comes from server side by default) inside <code>initCanvas()</code>. This function statement accept <code>PAGE</code> as the argument and invokes plugin if it exists.</p>
+
+<pre><code>// This is initCanvas function
+App.prototype.initCanvas = function() {
+    var self = this, page = PAGE, view = null;    
+    switch(page) {
+        // If the PAGE is home then this plugin will be invoked.
+        case 'home':            
+            view = self.getClass('home');
+            view.init();
+        break;  
+    }
+    return;
+};
+</code></pre>
+
+<p>Now for our simple Todo app lets create a <code>todo_list</code> plugin. Remember that we have already created conditions in our controller of server side to accept update and create actions. </p>
+
+<pre><code>/*
+ *  Todo list
+ *  ( Todo page details)
+ */
+window.application.addClass('todo_list',(function($,app) {
+
+    function Todo() {
+
+    };    
+
+    // This function will send a task create request to server
+    Todo.prototype.create_task = function( callback ) {
+        var task_title = $('#new-task-text').val();
+        if (task_title == '') {
+            alert('task cannot be empty!!');
+            return false;
+        }    
+        var option = {
+            'data': {
+                '_action'   : 'new_task',
+                'task_title': task_title
+            },
+            'success': callback
+        };
+        app.Ajax(option);
+    };
+
+    // This request will update an existing task 
+    Todo.prototype.update_task = function( data, callback ) {        
+        var option = {
+            'data': {
+                '_action'   : 'update_task'        
+            },
+            'success': callback
+        };
+        $.extend(option.data, data);
+        app.Ajax(option);
+    };
+
+    // This is the main function that will invoke from application
+    Todo.prototype.init = function() {
+        var self = this;
+
+        // Always focus on task create textbox, keep it clean
+        $('#new-task-text').focus().empty();
+
+        // If we press enter then create task
+        $('#new-task-text').keydown(function(e){
+            // On pressing enter
+            if (e.which == 13) {
+                self.create_task(function(){
+                    location.reload();
+                });
+            }      
+        });
+
+        // If we press create button then call create task
+        $('#create-task').click(function(e){      
+            self.create_task(function(){
+                location.reload();
+            });          
+        });
+
+        // Mark task as done / undone by checking checkbox
+        $('.complete-task').change(function(){
+            var id = $(this).attr('id').split('-')[1];
+            var data = {'task_id':id,'status' : 'COMPLETED'};
+            if (!$(this).is(':checked')) {
+                data.status = 'PENDING';
+            }                
+            self.update_task(data, function( res ) {              
+                location.reload();
+            });              
+        });
+    };
+
+    // return todo page plugin to application
+    return (new Todo());    
+
+})(jQuery,window.application));
+</code></pre>
+
+<p>After all this Lets add some style to our app so that it looks OK.</p>
+
+<pre><code>.todo-row{
+   padding:5px 0px;
+   border-bottom:1px solid #ccc;
+}
+#new-task-block
+{
+    border-bottom: 1px solid #ccc;
+    background:#efefef;
+    padding:10px 0px;
+}
+
+#create-task{
+    padding:6px 5px;
+}
+.new-task-text{
+    width:100%;
+    margin-left:2px;
+    padding:10px 2px;
+    border-radius:0px;
+    border:1px solid #ccc;  
+}
+
+.task-name{
+    font-size:1.5em;
+    font-family:inherit;
+    color:#555;
+}
+
+.task-done{
+    text-decoration:line-through;
+    color:#808080;
+}
+</code></pre>
+
+<p>Ok, We have just created a simple Todo application. Oh One more thing, It works in mobile also, try to resize the window and see the magic :-)   </p>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">Flubber maintained by <a href="https://github.com/madhugb">madhugb</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+
+  </body>
+</html>
