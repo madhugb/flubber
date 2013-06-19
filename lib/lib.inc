@@ -31,14 +31,16 @@ class lib extends datastore
   function __construct($dbname = DBNAME)
   {
     parent::__construct();        
-  }
+  }  
   
   /*
    *  Function to Respond to clients request
    */
+   
   function respond( $data = '')
   {
-    
+    printf("%s", json_encode($data));
+    return true;
   }
    
   /*
@@ -123,36 +125,43 @@ class lib extends datastore
     return false;
   }
 
-  public function sanitize($str)
-  {   
-    return addslashes($str);
-  }
-  
   /*
-   *   $data = array
-   *   (
-   *      'key' => 'value'
-   *   )
-   * 
-   *   $data = array
-   *   (
-   *      'key' => array
-   *      (
-   *        'sub_key' => 'sub_value' 
-   *      )
-   *   )   
-   */ 
-  
-  public function sanitizeArray($arr)
-  {   
-    foreach($arr as $key => &$data)
+   * Sanitize a string by adding slash
+   * @return string
+   */   
+  public function sanitize($str)
+  { 
+	  return addslashes($str);
+  }
+
+  /*
+   * Sanitize an array
+   * @return string
+   */     
+  public function sanitizeArray( $arr )
+  {
+    if (is_array($arr))
     {
-      if(is_array($data))
-      {
-        $data = $this->sanitizeArray($data);
+      foreach($arr as $key => &$data)
+      {      
+        if (is_array($data))
+          $data = $this->sanitizeArray($data);      
+        else
+        {        
+          try
+          {            
+            // convert all json string to php array and sanitize them too
+            $json = json_decode( $data , true);
+            if (is_array($json))
+            {
+              $data = $this->sanitizeArray( $json );          
+              continue;
+            }
+          }
+          catch(Exception $e) {}        
+          $data = $this->sanitize($data);
+        }      
       }
-      else
-        $data = $this->sanitize($data);
     }
     return $arr;
   }
