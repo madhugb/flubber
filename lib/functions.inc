@@ -22,4 +22,13 @@ function logger()
   }
 }
 
+/*
+ *  Function to redirect url
+ */
+function relocate( $url )
+{  
+  header('Location: http://'.$url);
+  exit;
+}
+
 ?>
