@@ -5,7 +5,7 @@
       <div class="top-wrapper">
         <div class="row-fluid">
           <div class="span12">
-            <h1 class="top-header"> <?php echo _s('flubber'); ?></h1>            
+            <h1 class="top-header"> <?php _e(_s('flubber')); ?></h1>            
           </div>  
         </div>
       </div>
@@ -13,7 +13,7 @@
     
     <div class="row-fluid">
       <div class="canvas-wrapper">
-        <?php echo $canvas_data; ?>
+        <?php _e($canvas_data); ?>
       </div>
     </div>
 
