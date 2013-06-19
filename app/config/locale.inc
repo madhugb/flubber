@@ -51,4 +51,20 @@ function _s( $key )
     return $locale_str['_nostr'];
 }
 
+/*
+ *  Print a string  
+ *    @param array or a strng  
+ */ 
+function _e( $str )
+{
+  // If variable is array , convert it to string.
+  if (is_array($str))
+  {    
+    echo "( ". implode(",",$str) ." )";    
+  }
+  else
+    echo $str;
+  return true;
+}
+
 ?>
