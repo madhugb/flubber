@@ -190,7 +190,11 @@ class view
    */ 
   private function get_page_id_ref()
   {
-    return sprintf("<script type='text/javascript'> var PAGE = '%s';</script>",$this->page_id);
+    /*
+     *  Page reference will contain DOMAIN name , Page ID, and PAGEDATA,
+     *  This will be accessed by the client application 
+     */ 
+    return sprintf("<script type='text/javascript'> var DOMAIN= '%s', PAGE = '%s', PAGEDATA=%s;</script>", SITEURL, $this->page_id, json_encode($this->page_content));
   }
   
   /*
