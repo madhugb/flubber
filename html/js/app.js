@@ -1,9 +1,25 @@
 (function($) {
          
   function App() {
+    /*!
+     *  Collection of ready view Classes
+     */ 
     this.views = [];
+
+    /*!
+     *  reference to page body
+     */ 
     this.body = $('body');
-    this.domainurl = 'http://flubbermvc.com'
+
+    /*!
+     *  Domain URL 
+     */ 
+    this.domainurl = '';
+
+    /*!
+     *  Page reference 
+     */ 
+    this.pageID = '';
   };
 
   App.prototype.log = function(message, object) {
@@ -18,7 +34,8 @@
   App.prototype.Ajax = function(opt) {
     var options = {
       url:'/',
-      type :'POST'
+      type :'POST',
+      dataType:'json'
     };
     $.extend(options,opt);
     return $.ajax(options);
@@ -28,13 +45,28 @@
     if (path)
       document.location = path;
   };
+
+  App.prototype.getPageData = function() {
+    /*!
+     *  This variable is set in server side VIEW class
+     */ 
+	  return window.PAGEDATA;
+  };
    
   App.prototype.addClass = function(name, rawClass) {
     this.views[name] = rawClass;     
   };
   
   App.prototype.getClass = function(name) {
-    return this.views[name];     
+    /*!
+     *  After getting the raw class
+     *  check for the pageData and pass it to plugin
+     */ 
+    if (typeof this.views[name] === 'undefined')
+      return false;
+    var rawClass = this.views[name];    
+    rawClass.appVars = this.getPageData();    
+    return rawClass;       
   };
   
   App.prototype.getargsFromURL = function() {
@@ -43,7 +75,7 @@
   };
   
   App.prototype.isLoggedIn = function() {
-    if ($.cookie('uid')) 
+    if ($.cookie('id')) 
       return true;    
     return false;
   };
@@ -82,23 +114,38 @@
     return;
   };
   
-  App.prototype.init = function() {
-    var self = this;   
+  App.prototype.init = function(page, domain) {
+    var self = this;
+    /*!
+     * set the global variables
+     */ 
+    self.pageID = page;
+    self.domainurl = domain;
+    
     self.initCanvas();    
   };   
 
   (window.application = new App());         
 
-  $(function() {    
-    window.application.init();
+  $(function() {
+    /*!
+     *  When document is ready pass page and domain reference to plugin
+     */ 
+    window.application.init(PAGE,DOMAIN);
   });
     
-  return (window.application);      
+  return (window.application);
+  
 })(jQuery);
 
 /*!
- *  Home Page
- *  ( Home page details)
+ *  New Class definition
+ *  this plugin structure will be refered as Flubber's View Class
+ *  
+ *  when `window.application` is ready, it loads all the class with a name
+ *  and a raw object of the View Class as shown below
+ *  and feom the application inin function we can trigger different plugins according to pageID
+ * 
  */
 window.application.addClass('home',(function($,app) {
   
@@ -111,6 +158,7 @@ window.application.addClass('home',(function($,app) {
     alert('Hello Welcome!!');
   };
   
-  return (new Home());    
+  return (new Home());
+  
 })(jQuery,window.application));
 
