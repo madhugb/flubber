@@ -39,7 +39,11 @@ class app extends controller
     $this->request['get']   = $getargs;   
     $this->request['post']  = $postargs; 
     $this->request['files'] = $fileargs;
-    
+
+    /*
+     * Call controller constructor to initialize database
+     */ 
+    parent::__construct();
   }         
   
   /*
