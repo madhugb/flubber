@@ -130,7 +130,8 @@ class controller extends lib
   function run( $request )
   {    
     $this->cleanup_request( $request );
-    $this->take_action();
+    // Take appropriate action based on the request, and return the output to app
+    return $this->take_action();
   }
 }
 
