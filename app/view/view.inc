@@ -312,7 +312,7 @@ class view
     
     // Show the page
     printf("%s", $page);
-    return;    
+    return true;    
   }
   
 }
