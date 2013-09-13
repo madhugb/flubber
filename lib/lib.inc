@@ -57,7 +57,7 @@ class lib extends datastore
     // trim the trailing slash and query
     $url   = rtrim($url,"?");    
     $url   = rtrim($url,"/");
-
+    $url   = trim($url,"/");
     //
     // If DOCROOT is not server Document Root
     //
