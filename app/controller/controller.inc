@@ -112,11 +112,12 @@ class controller extends lib
   { 
     switch( $this->_action )
     { 
-	  case 'home':
+      case 'home':
 	    $mod = $this->getmodel('sample_model');
 	    $mod_date = $mod->test_function($this->_request);
 	    $view = $this->getview($mod_date);
 	    return $view->show_page('home');
+      break;	  
       default:      
         $view =  $this->getview();
         return $view->show_page('home');                    
