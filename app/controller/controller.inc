@@ -61,9 +61,11 @@ class controller extends lib
       {
         // search for pattern in url
         $permastruct = $this->get_action_data();
-        
         // Append the related rgsfrom permastruct to GET array
-        $this->_request['get'] = array_merge($request['get'], $permastruct['data']);
+        if ($permastruct)        
+          $this->_request['get'] = array_merge($request['get'], $permastruct['data']);
+        else 
+          $this->_request['get'] = array("_action" => "404", "message" => "Invalid url");
       }
       // Update the action
       $this->_action  = $this->_request['get']['_action'];    
@@ -113,11 +115,15 @@ class controller extends lib
     switch( $this->_action )
     { 
       case 'home':
-	    $mod = $this->getmodel('sample_model');
-	    $mod_date = $mod->test_function($this->_request);
-	    $view = $this->getview($mod_date);
-	    return $view->show_page('home');
+  	    $mod = $this->getmodel('sample_model');
+        $mod_date = $mod->test_function($this->_request);
+        $view = $this->getview($mod_date);
+        return $view->show_page('home');
       break;	  
+      case '404':
+        $view = $this->getview();
+        return $view->show_page('404');
+      break;
       default:      
         $view =  $this->getview();
         return $view->show_page('home');                    
