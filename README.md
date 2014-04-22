@@ -62,29 +62,29 @@ But before that let us look at the directory structure
        |       |        |
        |       |        |----- locale/
        |       |        |        |
-       |       |        |        |----- en.inc     
+       |       |        |        |----- en.php     
        |       |        |        :
        |       |        |        :
-       |       |        |        |----- some-language.inc       
+       |       |        |        |----- some-language.php       
        |       |        |
-       |       |        |----- config.inc
+       |       |        |----- config.php
        |       |        |
-       |       |        |----- locale.inc
+       |       |        |----- locale.php
        |       |        |
-       |       |        |----- settings.inc
+       |       |        |----- settings.php
        |       |        |
-       |       |        |----- urls.inc
+       |       |        |----- urls.php
        |       |        
        |       |----- controller/
        |       |        |
-       |       |        |----- controller.inc       
+       |       |        |----- controller.php       
        |       | 
        |       |----- model/
        |       |        |
-       |       |        |----- model-a.inc
+       |       |        |----- model-a.php
        |       |        :
        |       |        :
-       |       |        |----- model-n.inc
+       |       |        |----- model-n.php
        |       |
        |       |----- view/
        |       |        |
@@ -95,9 +95,9 @@ But before that let us look at the directory structure
        |       |        |         :
        |       |        |         |----- template-n.php
        |       |        |       
-       |       |        |----- view.inc       
+       |       |        |----- view.php      
        |       |
-       |       |----- app.inc
+       |       |----- app.php
        |
        |----- db/
        |
@@ -128,11 +128,11 @@ But before that let us look at the directory structure
        |       |    
        |       |----- datastore/
        |       |       |     
-       |       |       |----- datastore.inc
+       |       |       |----- datastore.php
        |       |    
-       |       |----- functions.inc
+       |       |----- functions.php
        |       |    
-       |       |----- lib.inc
+       |       |----- lib.php
        
     
   
@@ -167,7 +167,7 @@ Create a `todo` database and create todo table as shown below
  
  **Config**
  
-Open `app/config/settings.inc` file and change it like below
+Open `app/config/settings.php` file and change it like below
 
      <?php  
      
@@ -183,25 +183,15 @@ Open `app/config/settings.inc` file and change it like below
  
 There should be a URL for our Todo app, so lets create required urls. 
  
-Open `app/config/urls.inc` file and add the following urls
+Open `app/config/urls.php` file and add the following urls
 
      <?php
       
-      $parmalinks = array
-      (
-        ...
-        
-        "todo_list" => "/todo$/i"
-        
-      );
-      
-      $link_args = array
-      (
-        ...
-        
-        "todo_list" => array("_action"=>"list_todo")
-      );
-      
+        $urls = array
+        (
+          ...
+          array("#^todo$#",array("_action"=>"list_todo"))
+        );
      ?>
     
     
@@ -209,12 +199,12 @@ Open `app/config/urls.inc` file and add the following urls
 **Model**
 
 For our Todo app to work you need a model. Here is how you do it.
- Create a file named `todo.inc` in `app/model/` which contains the following code.
+ Create a file named `todo.php` in `app/model/` which contains the following code.
 
      <?php
      
       // Include library      
-      include_once LIB_PATH. 'lib.inc';
+      include_once LIB_PATH. 'lib.php';
       
       // Todo is the name of our model
       class todo extends lib
@@ -383,7 +373,7 @@ In the template above you can see the PHP code inside HTML template.
 
   Lets add some strings that we mentioned in above template.
   
-  open `app/config/locale/en.inc` and add the following string.
+  open `app/config/locale/en.php` and add the following string.
 
     <?php
         $strings = array
@@ -401,7 +391,7 @@ In the template above you can see the PHP code inside HTML template.
         );
     ?>
 
-We can create our own file for language support in the same format. Set the language just by calling `set_locale()` anywhere in the application. We can also change it in `config.inc`.
+We can create our own file for language support in the same format. Set the language just by calling `set_locale()` anywhere in the application. We can also change it in `config.php`.
 
 
 **Controller**
@@ -410,7 +400,7 @@ Like in any *MVC design pattern*, without `Controller` application cannot do any
 
 Lets add multiple conditions inside `take_action` function to do operations like *list*, *create*,*update* 
 
-Open `app/controller/controller.inc` and add the below conditions inside the switch condition.
+Open `app/controller/controller.php` and add the below conditions inside the switch condition.
 
     function take_action()
     {
