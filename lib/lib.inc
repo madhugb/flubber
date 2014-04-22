@@ -103,25 +103,21 @@ class lib extends datastore
    */ 
   function get_action_data($url = null)
   {
-    global $permalinks, $link_args;
+    global $urls;
     $matches = false;
     if ( $url == null )
       $url = $this->get_request_params();
-    //logger("url",$url);
-    foreach( $permalinks as $id => $reg )
-    {      
-      preg_match($reg, $url, $matches);    
-      logger($reg,$url,$matches);  
+    foreach( $urls as $i => $cnf )
+    {
+      preg_match($cnf[0], $url, $matches);
       if ( $matches )
-      {        
-        $vars = $link_args[$id];        
+      {
+        $vars = $cnf[1]; 
         foreach($matches as $key => $value)
-        {          
-          if (isset($vars[$key])) $vars[$key]  = $value;
-        }        
-        return array('id' => $id, 'data'=> $vars);
+          $vars[$key]  = $value;
+        return array('id' => $id, 'data' => $vars);
       }
-    }    
+    }
     return false;
   }
 

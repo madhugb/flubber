@@ -11,28 +11,37 @@
  *  
  */
 
-  // Permalinks array containing Expressions to match a perticular URL. 
-  // Basically it allows you to split a particular URL into a proper get request, to be fed to _action 
-  // with many variables 
-  
-  $permalinks = array
+  #
+  # urls give the navigation ability to web app with simple url strucutre 
+  #
+  $urls = array
   (
-    // If url is `/` then path is home
-    "home"  => "/^$/"
-    
-     // Here the actual article-id will be store in the variable article-id and will be used in 
-     // the action show_article. In short, it (with help of link_args) creates a complete GET request from a URL
-    //"blog" => "?P<article_id>[0-9]+"
-    
-  );
+    #
+    # Each URL is matched with a regex which is in first index
+    #
+    # If the regex matches with the URL path then the second index is passed as GET argument
+    # 
+    # Regex are enclosed within `#`
+    #
 
-  // This array maps the static url's requested to different actions. It is needed only for GET requests.
-  $link_args = array
-  (
-    "home"    => array("_action"=>"home")
-    // Here the article_id is taken from permanlinks above. The key 'article_id' should be same as the <article_id>
-    // of the Regular Expression above.
-    //"blog"    => array("_action"=>"blog", "article_id"=>"")
+    array( "#^$#",  array("_action" => "home") )
+    # the above line states 
+    #   If the array[0](i.e #^$#) matches with the url path in this case if the url path is empty
+    #     Then take the request _action from the second action 
+    #     extend the values in second index with php GET global array
+    # 
+    # Some examples 
+    # 1. array("#^dashboard$#", array("_action" => "dashboard"))
+    #     Same example as above but the regex is different 
+    #     this matches then the _action will be dashboard
+    #     
+    # 2. array("#^user/(?P<user_id>[0-9]+)$#", array("_action" => "user_view"))
+    #      Here the value matching with `(?P<user_id>[0-9]+)` variable in the path 
+    #      will be sent along with the rest of the values 
+    #      so the final GET argument will be as below
+    #
+    #      if the url path is `http://example.com/user/10`
+    #      then GET request will be transformed into
+    #      array("_action"=>"user_view","user_id"=>"10")
   );
-  
 ?>
