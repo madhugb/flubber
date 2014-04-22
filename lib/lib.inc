@@ -11,7 +11,7 @@
  */
 
 // Include Datastore 
-include_once LIB_PATH.'datastore/datastore.inc';
+include_once LIB_PATH.'datastore/datastore.php';
 
 class lib extends datastore
 {

@@ -18,9 +18,9 @@
 define('CONFIG_PATH',       DOCROOT.'../app/config/');
 
 // Load all the configurations 
-require CONFIG_PATH . 'config.inc';
+require CONFIG_PATH . 'config.php';
 
-include_once CONTROLLER_PATH. 'controller.inc';
+include_once CONTROLLER_PATH. 'controller.php';
 
 // Application extends controller
 class app extends controller

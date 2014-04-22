@@ -12,7 +12,7 @@
  */
 
 // Include lib
-include_once LIB_PATH. 'lib.inc';
+include_once LIB_PATH. 'lib.php';
 
 /*
  *  make sure class name is same as model name

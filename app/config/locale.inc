@@ -18,11 +18,11 @@ $locale_str = array();
 function init_locale()
 {
   global $locale_str, $locale;
-  if (!file_exists(LOCALE_PATH. $locale. '.inc'))
+  if (!file_exists(LOCALE_PATH. $locale. '.php'))
   {
     die("Strings not found");
   }
-  include_once LOCALE_PATH. $locale. '.inc';  
+  include_once LOCALE_PATH. $locale. '.php';  
   $locale_str = $strings;  
 }
 

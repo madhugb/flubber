@@ -19,7 +19,7 @@
   /*
    * Include App
    */  
-  include_once DOCROOT. '../app/app.inc';
+  include_once DOCROOT. '../app/app.php';
 
   /*
    *  Create new application instance and pass all the agruments

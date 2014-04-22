@@ -12,7 +12,7 @@
  */
 
 // Include lib
-include_once LIB_PATH. 'lib.inc';
+include_once LIB_PATH. 'lib.php';
 
 // main controller class
 class controller extends lib
@@ -86,7 +86,7 @@ class controller extends lib
    */ 
   protected function getview($view_data = array())
   {
-    include_once DOCROOT. '/../app/view/view.inc';
+    include_once DOCROOT. '/../app/view/view.php';
     $page_meta = $this->get_page_meta_info();
     $page_meta['is_mobile'] = $this->is_mobile;    
     return ( new view($view_data, $page_meta) );

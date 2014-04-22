@@ -43,19 +43,19 @@
   define('CONTROLLER_PATH', DOCROOT     . '../app/controller/');
   
   // Load the url collections
-  require_once CONFIG_PATH . 'urls.inc';
+  require_once CONFIG_PATH . 'urls.php';
   
   // Load the core functions
-  require_once LIB_PATH . 'functions.inc';
+  require_once LIB_PATH . 'functions.php';
   
   // Load database configuration
-  require_once CONFIG_PATH . 'settings.inc';
+  require_once CONFIG_PATH . 'settings.php';
 
   /*
    *  Set a locale language
    *  Set a default language by default for alll operations   
    */ 
-  require_once CONFIG_PATH . 'locale.inc';  
+  require_once CONFIG_PATH . 'locale.php';  
   set_locale("en");
   
 ?>
