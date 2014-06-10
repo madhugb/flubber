@@ -26,7 +26,7 @@ Its designed to be
  * **Extendable**: Extend the behaviour of the app with easy Extensions or build your own extensions.
 
 
- visit [http://flubbermvc.com](http://flubbermvc.com) for more info and demo
+ visit [http://flubber.co](http://flubber.co) for more info and demo
  
  
 -----------------------------------
