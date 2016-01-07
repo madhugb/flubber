@@ -2,13 +2,13 @@
 
 function FLAutoloader($class) {
 	if (0 !== strpos($class, 'Flubber')) {
-        return;
-    }
+		return;
+	}
 
-    if (0 === strpos($class, 'Flubber\\')) {
-        $class = explode('Flubber\\', $class)[1];
-    }
-    if (is_file($file = dirname(__FILE__).'/'.$class.'.php')){
+	if (0 === strpos($class, 'Flubber\\')) {
+		$class = explode('Flubber\\', $class)[1];
+	}
+	if (is_file($file = dirname(__FILE__).'/'.$class.'.php')){
 		require $file;
 		return;
 	}

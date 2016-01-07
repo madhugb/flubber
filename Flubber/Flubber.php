@@ -7,7 +7,8 @@ define('FLIB', dirname(__FILE__).'/');
 require_once 'functions.php';
 
 use Flubber\Datastore as Datastore,
-	Flubber\Request as Request;
+	Flubber\Request as Request,
+	Flubber\FLException as FLException;
 
 class Flubber {
 
