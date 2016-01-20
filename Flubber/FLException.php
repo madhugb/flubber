@@ -1,19 +1,20 @@
 <?php
+namespace Flubber;
 
-class FLException extends Exception {
+class FLException extends \Exception {
 
-    public $message = "";
+	public $message = "";
 
-    public $status_code = 500;
+	public $status_code = 500;
 
-    function __construct($message, $data) {
-        parent::__construct($message);
-        $this->message = $message;
-        if (array_key_exists('status', $data)) {
-          $this->status_code = $data['status'];
-        }
+	function __construct($message, $data) {
+		parent::__construct($message);
+		$this->message = $message;
+		if (array_key_exists('status', $data)) {
+			$this->status_code = $data['status'];
+		}
 
-    }
+	}
 
 }
 

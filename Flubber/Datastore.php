@@ -1,10 +1,19 @@
 <?php
 namespace Flubber;
+/**
+ *
+ *  Datastore Handler
+ *  This creates a global datastore instance from config
+ *
+ *  @Author  : Madhu Geejagaru Balakrishna <me@madhugb.com>
+ *  @License : The MIT License (MIT)
+ *  Copyright (c) 2013-2016 Madhu Geejagaru Balakrishna <me@madhugb.com>
+ *
+ */
+global $datastore;
 
 if (DBTYPE) {
-  // require FLIB.'Datastore/'.DBTYPE.'.php';
   require 'Datastore/'.DBTYPE.'.php';
-  global $datastore;
 }
 
 class Datastore {
@@ -16,7 +25,11 @@ class Datastore {
 	function init() {
 		global $datastore;
 		$driver = DBTYPE;
-		$datasotre = new $driver();
+		if (class_exists($driver)) {
+			$datasotre = new $driver();
+		} else if (DBTYPE != ''){
+			throw new FLException("Database drive type ".DBTYPE." is not valid.");
+		}
 	}
 }
 

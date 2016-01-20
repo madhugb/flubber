@@ -2,43 +2,52 @@
 namespace Flubber;
 
 define('FLIB', dirname(__FILE__).'/');
+define('FLVERSION', 2.0);
 
 // Load the core functions
-require_once 'functions.php';
+require_once 'Functions.php';
 
 use Flubber\Datastore as Datastore,
 	Flubber\Request as Request,
-	Flubber\FLException as FLException;
+	Flubber\FLException as FLException,
+	Flubber\Locale as Locale,
+	Flubber\Session as Session;
+
+// Load All Locale strings.
+Locale::autoload();
+
+// Load datastore
+Datastore::init();
+
+// Load Session
+Session::init();
+
+// Initialize request
+Request::init();
 
 class Flubber {
 
-	 private $request = array( 'post' => array(), 'get' => array(),
-								'put' => array(), 'delete' => array());
+	protected $request = null;
 
-	function __construct() {
-		Datastore::init();
-		$this->request = new Request();
-	}
+	function __construct() { }
 
 	/*
 	 * Initialize Main application
 	 */
 	public function start() {
-		$response = false;
-
+		global $FLRequest;
 		// Run module passing the request to get appropriate response
 		try {
-			$module = gethandler($this->request);
+			$module = gethandler($FLRequest->handler);
 			call_user_func_array(
-				array($module, $this->request->method),
-				$this->request->params);
+					array($module, $FLRequest->method), $FLRequest->params);
 		} catch (FLException $e) {
-			$this->request->exception = $e;
-			$this->request->handler = 'Error';
-			$error = gethandler($this->request);
+			$FLRequest->exception = $e;
+			$FLRequest->handler = 'Error';
+			$error = gethandler($FLRequest->handler);
 			$error->notify();
 		} catch (\Exception $e) {
-			print_r($e);
+			echo $e->getmessage();
 		} finally {
 			return true;
 		}

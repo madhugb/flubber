@@ -1,6 +1,8 @@
 <?php
 namespace Flubber;
 
+$FLRequest = null;
+
 class Request {
 
 	public $method = 'get';
@@ -19,15 +21,11 @@ class Request {
 		'put' => array(),
 		'delete' => array());
 
-	public $csrf_check = TRUE;
+	public $csrf_check = true;
 
 	public $exception = null;
 
 	function __construct() {
-		$this->initialize();
-	}
-
-	private function initialize() {
 		$this->headers = $this->getallheaders();
 		$this->method = strtolower($_SERVER['REQUEST_METHOD']);
 		$this->body = file_get_contents('php://input');
@@ -56,6 +54,11 @@ class Request {
 		$this->params = $permastruct['params'];
 	}
 
+	public function init() {
+		global $FLRequest;
+		$FLRequest = new Request();
+	}
+
 	function getallheaders() {
 		$headers = '';
 		foreach ($_SERVER as $name => $value) {
@@ -71,21 +74,21 @@ class Request {
 		return $headers;
 	}
 
- 	function get_arguments() {
+	function get_arguments() {
  		return $this->data;
- 	}
+	}
 
- 	function get($key) {
+	function get($key) {
  		return $this->data['get'][$key];
- 	}
+	}
 
- 	function param($key) {
+	function param($key) {
  		return $this->params[$key];
- 	}
+	}
 
- 	function post($key) {
+	function post($key) {
  		return $this->data['post'][$key];
- 	}
+	}
 }
 
 ?>

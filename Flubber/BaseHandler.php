@@ -10,88 +10,139 @@ namespace Flubber;
  *  Copyright (c) 2013-2016 Madhu Geejagaru Balakrishna <me@madhugb.com>
  *
  */
-use Flubber\Response as Response;
+use Flubber\Response as Response,
+	Flubber\FLException as FLException;
 
 class BaseHandler {
 
-  protected $request = array();
+	protected $request = null;
 
-  protected $request_method = 'get';
+	protected $request_method = 'get';
 
-  protected $datastore = null;
+	protected $datastore = null;
 
-  function __construct($request) {
-    global $datastore;
-    $this->datastore = $datastore;
-    $this->request = $request;
-    $this->init_csrf();
-  }
+	protected $response_status = null;
 
-  private function init_csrf() {
-    if ($this->request->csrf_check &&
-        in_array($this->request->method, ['post','put'])) {
-      $token = "";
-      if (isset($this->request->headers['X-Csrf-Token'])){
-        $token = $this->request->headers['X-Csrf-Token'];
-      }
-      if (isset($this->request->data['post']['_csrf'])) {
-        $token = $this->request->data['post']['_csrf'];
-      }
-      $valid = validate_csrf($token);
-      if ($valid) return true;
-    } else {
-      return true;
-    }
+	protected $headers = array();
 
-    throw new FLException('CSRF Token Invalid.',
-                        array('status' => 403));
-  }
+	protected $session = null;
 
-  function options() {
-    $this->set_status(405);
-    $this->respond("Method Not Allowed");
-  }
+	function __construct($args=array()) {
+		global $datastore, $FLRequest, $FLSession;
+		$this->datastore = $datastore;
+		$this->session = $FLSession;
 
-  function get(){
-    $this->set_status(405);
-    $this->respond("Method Not Allowed");
-  }
+		if (is_a($FLRequest, 'Flubber\Request')) {
+			$this->request = $FLRequest;
+		} else {
+			throw new FLException("Invalid Request in BaseHandler.",
+							array('status' => 500));
+		}
 
-  function post(){
-    $this->set_status(405);
-    $this->respond("Method Not Allowed");
-  }
+		if (isset($args['auth']) && count($args['auth']) > 0) {
+			if (in_array($this->request->method,$args['auth']) &&
+				!$this->is_authenticated()) {
+				relocate(LOGIN_URI);
+			}
+		}
 
-  function put(){
-    $this->set_status(405);
-    $this->respond("Method Not Allowed");
-  }
+		if (isset($args['csrf_check'])) {
+			$this->request->csrf_check = $args['csrf_check'];
+		}
+		$this->init_csrf();
+	}
 
-  function delete(){
-    $this->set_status(405);
-    $this->respond("Method Not Allowed");
-  }
+	function is_authenticated() {
+		if ($this->session->id && $this->session->get('uid')) {
+			return true;
+		}
+		return false;
+	}
 
-  function show_page($template, $data=array(), $headers=array()){
-    $response = new Response($template, $data);
-    $response->set_headers($headers);
-    return $response->respond();
-  }
+	private function init_csrf() {
 
-  function send_json( $data = ''){
-    header('Content-Type: application/json; charset=UTF-8;');
-    echo json_encode($data);
-    return true;
-  }
+		if ( $this->request->csrf_check &&
+				in_array($this->request->method, ['post','put']) ) {
 
-  function respond( $data = ''){
-    echo $data;
-    return true;
-  }
+			$token = "";
+			if (isset($this->request->headers['X-Csrf-Token'])) {
+				$token = $this->request->headers['X-Csrf-Token'];
+			}
 
-  function set_status($code){
-    http_response_code($code);
-  }
+			if (isset($this->request->data['post']['_csrf'])) {
+				$token = $this->request->data['post']['_csrf'];
+			}
+
+			$valid = validate_csrf($token);
+			if ( $valid ) {
+				return true;
+			}
+		} else {
+			return true;
+		}
+		throw new FLException('CSRF Token Invalid.',
+					array('status' => 403));
+	}
+
+	function options() {
+		throw new FLException('Method Not Allowed.',
+					array('status' => 405));
+	}
+
+	function get() {
+		throw new FLException('Method Not Allowed.',
+					array('status' => 405));
+	}
+
+	function post() {
+		throw new FLException('Method Not Allowed.',
+					array('status' => 405));
+	}
+
+	function put() {
+		throw new FLException('Method Not Allowed.',
+					array('status' => 405));
+	}
+
+	function delete() {
+		throw new FLException('Method Not Allowed.',
+					array('status' => 405));
+	}
+
+	function show_page(
+			$template,
+			$data = array()) {
+
+		$response = new Response($template, $data);
+		if (isset($this->response_status)) {
+			$response->set_status($this->response_status);
+		}
+
+		if (isset($this->headers)) {
+			$response->set_headers($this->headers);
+		}
+
+		return $response->respond();
+	}
+
+	function send_json( $data = '') {
+		$response = new Response('JSON', $data);
+		$response->set_header('Content-Type','application/json; charset=UTF-8;');
+
+		if (isset($this->response_status)) {
+			$response->set_status($this->response_status);
+		}
+
+		if (isset($this->headers)) {
+			$response->set_headers($this->headers);
+		}
+
+		return $response->respond();
+	}
+
+	function set_status($status) {
+		$this->response_status = $status;
+	}
 
 }
 
