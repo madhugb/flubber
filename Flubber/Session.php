@@ -17,58 +17,58 @@ $FLSession = null;
 
 class Session {
 
-	public $id = null;
+    public $id = null;
 
-	function __construct(){ }
+    function __construct(){ }
 
-	function init() {
-		global $FLSession;
-		$FLSession = new Session();
-		$id = $FLSession->start();
-		$FLSession->id = $id;
-	}
+    function init() {
+        global $FLSession;
+        $FLSession = new Session();
+        $id = $FLSession->start();
+        $FLSession->id = $id;
+    }
 
-	public function start($id=false) {
-		if (empty($id)) {
-			HTTP_Session::start(SESSION_NAME, null);
-			$id = HTTP_Session::id();
-		} else {
-			HTTP_Session::start(SESSION_NAME, $id);
-		}
+    public function start($id=false) {
+        if (empty($id)) {
+            HTTP_Session::start(SESSION_NAME, null);
+            $id = HTTP_Session::id();
+        } else {
+            HTTP_Session::start(SESSION_NAME, $id);
+        }
 
-		HTTP_Session::setExpire(time() + SESSION_EXPIRY);
-		HTTP_Session::setIdle(time() + SESSION_IDLE);
+        HTTP_Session::setExpire(time() + SESSION_EXPIRY);
+        HTTP_Session::setIdle(time() + SESSION_IDLE);
 
-		if (HTTP_Session::isIdle() || HTTP_Session::isExpired()) {
-			return false;
-		}
-		return $id;
-	}
+        if (HTTP_Session::isIdle() || HTTP_Session::isExpired()) {
+            return false;
+        }
+        return $id;
+    }
 
-	function destroy($id=false) {
-		HTTP_Session::destroy($id);
-	}
+    function destroy($id=false) {
+        HTTP_Session::destroy($id);
+    }
 
-	/**
-	 * Is key defined in session?
-	 */
-	static function has($key) {
-		return HTTP_Session::is_set($key);
-	}
+    /**
+     * Is key defined in session?
+     */
+    static function has($key) {
+        return HTTP_Session::is_set($key);
+    }
 
-	/**
-	 * Get value for the key.
-	 */
-	static function get($key, $defvalue = '') {
-		return HTTP_Session::get($key, $defvalue);
-	}
+    /**
+     * Get value for the key.
+     */
+    static function get($key, $defvalue = '') {
+        return HTTP_Session::get($key, $defvalue);
+    }
 
-	/**
-	 * Set value for the key.
-	 */
-	static function set($key, $value) {
-		HTTP_Session::set($key, $value);
-	}
+    /**
+     * Set value for the key.
+     */
+    static function set($key, $value) {
+        HTTP_Session::set($key, $value);
+    }
 }
 
 ?>

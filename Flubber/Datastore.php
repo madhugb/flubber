@@ -18,19 +18,19 @@ if (DBTYPE) {
 
 class Datastore {
 
-	function __construct() {
+    function __construct() {
 
-	}
+    }
 
-	function init() {
-		global $datastore;
-		$driver = DBTYPE;
-		if (class_exists($driver)) {
-			$datasotre = new $driver();
-		} else if (DBTYPE != ''){
-			throw new FLException("Database drive type ".DBTYPE." is not valid.");
-		}
-	}
+    function init() {
+        global $datastore;
+        $driver = DBTYPE;
+        if (class_exists($driver)) {
+            $datastore = new $driver();
+        } else if (DBTYPE != ''){
+            throw new FLException("Database drive type ".DBTYPE." is not valid.");
+        }
+    }
 }
 
 ?>

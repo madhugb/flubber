@@ -114,7 +114,7 @@ require_once CONFIG_PATH . 'functions.php';
 	foreach($config_keys as $ind => $key) {
 		$re = "/__".$key."__/m";
 		$subst = "";
-		if (in_array($key, $config)) {
+		if (array_key_exists($key, $config)) {
 			$subst = $config[$key];
 		}
 		$template = preg_replace($re, $subst, $template);
@@ -131,6 +131,6 @@ logger("Flubber Path : ".$FlubberPath);
 $config = extract_config_from_cmdline($argv);
 $config_content = get_sample_config($config);
 
-// logger($config_content);
+logger($config_content);
 
 ?>

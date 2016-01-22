@@ -17,49 +17,49 @@ $FlubberLocale = null;
 
 class Locale {
 
-	public $locale = "en";
+    public $locale = "en";
 
-	public $languages = array("en");
+    public $languages = array("en");
 
-	public $strings = array("en" => array());
+    public $strings = array("en" => array());
 
-	public function autoload() {
-		global $FlubberLocale;
-		$FlubberLocale = new Locale();
+    public function autoload() {
+        global $FlubberLocale;
+        $FlubberLocale = new Locale();
 
-		// TODO: Load all the locale files from `LOCALE_PATH`
-		include_once LOCALE_PATH.'en.php';
-	}
+        // TODO: Load all the locale files from `LOCALE_PATH`
+        include_once LOCALE_PATH.'en.php';
+    }
 
-	/*
-	 * Register strings for a new language
-	 */
-	function register($lang, $strings) {
-		$this->strings[$lang] = $strings;
-	}
+    /*
+     * Register strings for a new language
+     */
+    function register($lang, $strings) {
+        $this->strings[$lang] = $strings;
+    }
 
-	/*
-	 * Set locale for the current session
-	 */
-	function set_locale($lang) {
-		if (isset($this->languages[$lang]) && isset($this->strings[$lang])) {
-			$this->locale  = $lang;
-		} else {
-			$this->locale = "en";
-		}
-	}
+    /*
+     * Set locale for the current session
+     */
+    function set_locale($lang) {
+        if (isset($this->languages[$lang]) && isset($this->strings[$lang])) {
+            $this->locale  = $lang;
+        } else {
+            $this->locale = "en";
+        }
+    }
 
-	/*
-	 * Get locale string
-	 *
-	 * If the string is not present then it will print
-	 *   `{lang:name}` So that you can add that you can test it.
-	 */
-	function get($name) {
-		return isset($this->strings[$this->locale][$name]) ?
-				$this->strings[$this->locale][$name] :
-				"{". $this->locale . ":". $name ."}";
-	}
+    /*
+     * Get locale string
+     *
+     * If the string is not present then it will print
+     *   `{lang:name}` So that you can add that you can test it.
+     */
+    function get($name) {
+        return isset($this->strings[$this->locale][$name]) ?
+                $this->strings[$this->locale][$name] :
+                "{". $this->locale . ":". $name ."}";
+    }
 }
 
 
