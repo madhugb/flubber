@@ -140,6 +140,19 @@ class BaseHandler {
         return $response->respond();
     }
 
+    function send_response($data = "") {
+        $response = new Response('TEXT', $data);
+        $response->set_header('Content-Type','text/html; charset=UTF-8;');
+
+        if (isset($this->response_status)) {
+            $response->set_status($this->response_status);
+        }
+        if (isset($this->headers)) {
+            $response->set_headers($this->headers);
+        }
+        return $response->respond();
+    }
+
     function set_status($status) {
         $this->response_status = $status;
     }
