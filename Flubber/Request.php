@@ -1,6 +1,8 @@
 <?php
 namespace Flubber;
 
+use Flubber\FLException as FLException;
+
 $FLRequest = null;
 
 class Request {
@@ -50,8 +52,10 @@ class Request {
         }
         // search for pattern in url
         $permastruct = get_handler_data();
-        $this->handler = $permastruct['handler'];
-        $this->params = $permastruct['params'];
+        if ($permastruct) {
+            $this->handler = $permastruct['handler'];
+            $this->params = $permastruct['params'];
+        }
     }
 
     public function init() {
