@@ -74,7 +74,8 @@ class Response {
     }
 
     function set_header($name, $value='') {
-        $this->headers[$key] = $value;
+        if (!in_array($name, $this->headers)) array_push($this->headers, $name);
+        $this->headers[$name] = $value;
     }
 
     function set_headers($headers=array()) {
@@ -83,9 +84,9 @@ class Response {
         }
     }
 
-    function render_headers($headers=array()) {
-        foreach($this->headers as $key => $value) {
-            header($name.": ".$value);
+    function render_headers() {
+        foreach($this->headers as $header => $value) {
+            header($header. ": ". $value);
         }
     }
 
@@ -93,6 +94,8 @@ class Response {
         $this->render_headers();
         if ($this->template == 'JSON') {
             echo json_encode($this->data);
+        } else if ($this->template == 'TEXT') {
+            echo $this->data;
         } else {
             $content = $this->prepare_content();
             echo $content->render($this->data);
