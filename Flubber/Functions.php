@@ -173,9 +173,9 @@ function sanitizeArray( $arr ) {
                         $data = sanitizeArray( $json );
                         continue;
                     }
-                }
-                catch(Exception $e) {}
+                } catch(Exception $e) {
                     $data = sanitize($data);
+                }
             }
         }
     }

@@ -38,16 +38,16 @@ class Flubber {
 
             $this->config();
 
-            // Load All Locale strings
+            // Load Locale strings
             Locale::autoload();
 
-            // Load datastore
+            // Load Datastore
             Datastore::init();
 
             // Load Session
             Session::init();
 
-            // Initialize request
+            // Load request
             Request::init();
 
         } catch (FLException $e) {
@@ -62,7 +62,7 @@ class Flubber {
     }
 
     /*
-     * Add more configuration paths forinternal use
+     * Add more configuration paths for internal use
      */
     private function config() {
 

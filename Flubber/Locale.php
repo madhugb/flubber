@@ -28,7 +28,6 @@ class Locale {
         global $FlubberLocale;
         $FlubberLocale = new Locale();
 
-        // TODO: Load all the locale files from `LOCALE_PATH`
         $locales = scandir(LOCALE_PATH);
         foreach($locales as $locale) {
 
