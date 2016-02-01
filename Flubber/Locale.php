@@ -17,18 +17,29 @@ $FlubberLocale = null;
 
 class Locale {
 
-    public $locale = "en";
+    public $locale = "";
 
-    public $languages = array("en");
+    public $languages = array();
 
-    public $strings = array("en" => array());
+    public $strings = array();
 
     public function autoload() {
         global $FlubberLocale;
         $FlubberLocale = new Locale();
-
         // TODO: Load all the locale files from `LOCALE_PATH`
-        include_once LOCALE_PATH.'en.php';
+        $locales = scandir(LOCALE_PATH);
+        foreach($locales as $locale) {
+
+            if ($locale == '.' || $locale == '..') continue;
+            if (preg_match('/.ini$/', $locale)) {
+                $locale_str =  parse_ini_file(LOCALE_PATH.$locale);
+                $lang = explode(".ini",$locale);
+                $FlubberLocale->register($lang[0],$locale_str);
+            }
+            if (preg_match('/.php$/', $locale)) {
+                include_once LOCALE_PATH.$locale;
+            }
+        }
     }
 
     /*
