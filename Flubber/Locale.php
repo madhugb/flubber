@@ -24,21 +24,25 @@ class Locale {
     public $strings = array();
 
     public function autoload() {
+
         global $FlubberLocale;
         $FlubberLocale = new Locale();
+
         // TODO: Load all the locale files from `LOCALE_PATH`
         $locales = scandir(LOCALE_PATH);
         foreach($locales as $locale) {
 
-            if ($locale == '.' || $locale == '..') continue;
+            if ($locale == '.' || $locale == '..')
+                continue;
+
             if (preg_match('/.ini$/', $locale)) {
+
                 $locale_str =  parse_ini_file(LOCALE_PATH.$locale);
                 $lang = explode(".ini",$locale);
-                $FlubberLocale->register($lang[0],$locale_str);
+                $FlubberLocale->register($lang[0], $locale_str);
+
             }
-            if (preg_match('/.php$/', $locale)) {
-                include_once LOCALE_PATH.$locale;
-            }
+
         }
     }
 

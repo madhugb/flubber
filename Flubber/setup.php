@@ -46,15 +46,8 @@ function get_sample_config($config) {
  */
 
 // Defining path
-define('DOCROOT', dirname(__FILE__).'/..');
+define('APPROOT', dirname(__FILE__).'/..');
 
-define('CONFIG_PATH', DOCROOT . '/config/');
-
-define('LOCALE_PATH',  CONFIG_PATH.'locale/');
-
-define('HANDLER_PATH', DOCROOT . '/handlers/');
-
-define('VIEW_PATH', DOCROOT . '/views/');
 
 /*
  *  host name (flubber.co ,labs.example.com)

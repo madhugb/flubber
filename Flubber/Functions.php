@@ -202,12 +202,13 @@ function get_request_params() {
  *  Identify handler and extract params from url
  */
 function get_handler_data($url = null) {
-    global $urls;
+    global $FlubberHandlers;
+
     if ( $url == null ) {
         $url = get_request_params();
     }
 
-    foreach( $urls as $i => $cnf ) {
+    foreach( $FlubberHandlers as $i => $cnf ) {
         $matches = false;
         preg_match($cnf[0], $url, $matches);
         if ( $matches ) {
@@ -229,5 +230,6 @@ function get_handler_data($url = null) {
     }
     return false;
 }
+
 
 ?>

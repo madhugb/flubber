@@ -1,15 +1,12 @@
 <?php
 
-class FLVendor_Autoloader
-{
-    public static function register($prepend = false)
-    {
+class FLVendor_Autoloader {
+    public static function register($prepend = false) {
         spl_autoload_register(array(__CLASS__, 'autoload'), true, $prepend);
     }
 
-    public static function autoload($class)
-    {
-        echo $class . "<br>";
+    public static function autoload($class){
+
         if (0 !== strpos($class, 'FLVendor')) {
             return;
         }

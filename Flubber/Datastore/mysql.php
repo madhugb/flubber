@@ -17,20 +17,29 @@ class mysql {
 	protected $database  = null;
 
 	function __construct() {
+
 		try {
+
 			$this->connection = new mysqli(DBHOST, DBUSER, DBPASS, DBNAME);
+
 		} catch(\Exception $e) {
+
 			logger('Connection failed:', $e , true);
 			throw new FLException("Error in connecting to databse");
+
 		}
 	}
 
 	function query($query) {
 		try {
+
 			return $this->connection->query($query);
+
 		} catch(\Exception $e) {
+
 			$message = sprintf("Error executing query: %s [ERROR: %s]", $query, $e->getmessage());
 			throw new FLException($message);
+
 		}
 		return false;
 	}
