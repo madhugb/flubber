@@ -22,9 +22,12 @@ class Flubber {
 
         try {
 
-            if (!array_key_exists('app', $config) || file_exists($config)) {
+            if (!array_key_exists('app', $config) || !is_dir($config['app'])) {
 
-                throw new FLException("App path is not sent ",
+                throw new FLException("App path is not sent.
+                    Please send `app` as abslute path while invoking Flubber.
+                    Example:
+                    `Flubber\Flubber(array( 'app' => '/var/www/my_app/' );`",
                                         array( 'status' => 500));
 
             } else {
@@ -65,13 +68,13 @@ class Flubber {
 
         if (APPROOT) {
 
-            define('CONFIG_PATH',   APPROOT.'/config/');
+            define('CONFIG_PATH',   APPROOT.'config/');
 
-            define('HANDLER_PATH',  APPROOT.'/handlers/');
+            define('HANDLER_PATH',  APPROOT.'handlers/');
 
-            define('VIEW_PATH',     APPROOT.'/views/');
+            define('VIEW_PATH',     APPROOT.'views/');
 
-            define('LOCALE_PATH',   APPROOT.'/config/locale/');
+            define('LOCALE_PATH',   APPROOT.'config/locale/');
 
         } else {
 
@@ -82,9 +85,15 @@ class Flubber {
         }
 
         // include configuration
+        if (!file_exists(CONFIG_PATH. 'config.php'))
+            throw new FLException("Configuration file not found.
+                    Make sure that you have config/config.php file.");
         require CONFIG_PATH. 'config.php';
 
         // Load handlers file
+        if (!file_exists(CONFIG_PATH. 'urls.php'))
+            throw new FLException("URL handlers not found.
+                    Make sure that you have config/urls.php file.");
         require CONFIG_PATH. 'urls.php';
 
         // Register all urls for handler

@@ -25,7 +25,11 @@ class Session {
         global $FLSession;
         $FLSession = new Session();
         $id = $FLSession->start();
-        $FLSession->id = $id;
+        if ($id) {
+            $FLSession->id = $id;
+        } else {
+            $FLSession->destroy();
+        }
     }
 
     public function start($id=false) {
