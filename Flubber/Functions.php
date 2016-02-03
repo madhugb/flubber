@@ -182,54 +182,5 @@ function sanitizeArray( $arr ) {
     return $arr;
 }
 
-/*
- *  Get request parameterfrom URL
- */
-function get_request_params() {
-    $uri   = (isset($_SERVER['REQUEST_URI']))  ? $_SERVER['REQUEST_URI']  : false;
-    $query = (isset($_SERVER['QUERY_STRING'])) ? $_SERVER['QUERY_STRING'] : '';
-
-    // Find actual url path
-    $url = str_replace($query, '', $uri);
-    // trim the trailing slash and query
-    $url = rtrim($url, "?");
-    $url = rtrim($url, "/");
-    $url = trim($url, "/");
-    return $url;
-}
-
-/*
- *  Identify handler and extract params from url
- */
-function get_handler_data($url = null) {
-    global $FlubberHandlers;
-
-    if ( $url == null ) {
-        $url = get_request_params();
-    }
-
-    foreach( $FlubberHandlers as $i => $cnf ) {
-        $matches = false;
-        preg_match($cnf[0], $url, $matches);
-        if ( $matches ) {
-            $params = array();
-            if (isset($cnf[2])) {
-                $params = $cnf[2];
-            }
-            foreach($matches as $key => $value) {
-                if (!is_numeric($key)) {
-                    $params[$key]  = $value;
-                }
-            }
-
-            return array(
-                'params' => $params,
-                'handler' => $cnf[1]
-            );
-        }
-    }
-    return false;
-}
-
 
 ?>
