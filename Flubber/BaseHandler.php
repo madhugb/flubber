@@ -53,7 +53,7 @@ class BaseHandler {
     }
 
     function is_authenticated() {
-        if ($this->session->id && $this->session->get('uid')) {
+        if ($this->session->get('uid')) {
             return true;
         }
         return false;
