@@ -10,69 +10,95 @@ namespace Flubber;
  *
  */
 
-require 'vendors/HTTP_Session/Session.php';
-use HTTP_Session;
-
-$FLSession = null;
+$FLSession;
 
 class Session {
 
-    public $id = null;
+    const SESSION_STARTED = TRUE;
+    const SESSION_NOT_STARTED = FALSE;
 
-    function __construct(){ }
+    private $sessionState = self::SESSION_NOT_STARTED;
 
-    function init() {
+    private $id = null;
+
+    private function __construct() {}
+
+    public function init(){
         global $FLSession;
-        $FLSession = new Session();
-        $id = $FLSession->start();
-        if ($id) {
-            $FLSession->id = $id;
-        } else {
-            $FLSession->destroy();
+        if ( !isset($FLSession)) {
+            $FLSession = new self;
+        }
+        $FLSession->start();
+    }
+
+    public function start() {
+        session_name(SESSION_NAME);
+        ini_set('session.gc_maxlifetime', SESSION_EXPIRY);
+        session_set_cookie_params(SESSION_EXPIRY, // expire in 24 hours
+                    '/',                          // path
+                    '.'.SITEURL,                  // domain
+                    false,                        // "secure only"
+                    true);                        // only over http
+
+        if ( $this->sessionState == self::SESSION_NOT_STARTED ) {
+            $this->sessionState = session_start(array(
+                                    'cookie_lifetime' => SESSION_EXPIRY));
+        }
+
+
+        if (SESSION_AUTO_RENEW
+                && isset($_SESSION['timeout_idle'])
+                && $_SESSION['timeout_idle'] < time()) {
+            $this->updateExpiry( time() + SESSION_EXPIRY);
+        }
+
+        $_SESSION['timeout_idle'] = $newidle = time() + SESSION_IDLE;
+
+        return $this->sessionState;
+    }
+
+    private function updateExpiry($lifetime) {
+        $cookie = session_get_cookie_params();
+        setcookie(session_name(),
+            session_id(),
+            $lifetime,
+            $cookie['path'],
+            $cookie['domain'],
+            $cookie['secure'],
+            $cookie['httponly']);
+    }
+
+    public function set( $name , $value ) {
+        $_SESSION[$name] = $value;
+    }
+
+    public function get( $name ) {
+        if ( isset($_SESSION[$name])) {
+            return $_SESSION[$name];
         }
     }
 
-    public function start($id=false) {
-        if (empty($id)) {
-            HTTP_Session::start(SESSION_NAME, null);
-            $id = HTTP_Session::id();
-        } else {
-            HTTP_Session::start(SESSION_NAME, $id);
+
+    public function is_set( $name ) {
+        return isset($_SESSION[$name]);
+    }
+
+
+    public function un_set( $name ) {
+        unset( $_SESSION[$name] );
+    }
+
+    public function destroy() {
+        if ( $this->sessionState == self::SESSION_STARTED ) {
+            $this->sessionState = !session_destroy();
+            unset( $_SESSION );
+
+            return !$this->sessionState;
         }
-
-        HTTP_Session::setExpire(time() + SESSION_EXPIRY);
-        HTTP_Session::setIdle(time() + SESSION_IDLE);
-
-        if (HTTP_Session::isIdle() || HTTP_Session::isExpired()) {
-            return false;
-        }
-        return $id;
-    }
-
-    function destroy($id=false) {
-        HTTP_Session::destroy($id);
-    }
-
-    /**
-     * Is key defined in session?
-     */
-    static function has($key) {
-        return HTTP_Session::is_set($key);
-    }
-
-    /**
-     * Get value for the key.
-     */
-    static function get($key, $defvalue = '') {
-        return HTTP_Session::get($key, $defvalue);
-    }
-
-    /**
-     * Set value for the key.
-     */
-    static function set($key, $value) {
-        HTTP_Session::set($key, $value);
+        return FALSE;
     }
 }
+
+
 
 ?>
