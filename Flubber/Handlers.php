@@ -1,12 +1,13 @@
 <?php
 namespace Flubber;
 /*
- *  Handlers
+ *  Core Handlers
  *
  *
  *  @Author  : Madhu Geejagaru Balakrishna <me@madhugb.com>
  *  @License : The MIT License (MIT)
- *  Copyright (c) 2013-2016 Madhu Geejagaru Balakrishna <me@madhugb.com>
+ *  @Copyright : (c) 2013-2016 Madhu Geejagaru Balakrishna <me@madhugb.com>
+ *  @Source : http://flubber.co
  *
  */
 

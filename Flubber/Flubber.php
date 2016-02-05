@@ -1,6 +1,16 @@
 <?php
 namespace Flubber;
-
+/**
+ *
+ *  Flubber Core Application
+ *
+ *
+ *  @Author  : Madhu Geejagaru Balakrishna <me@madhugb.com>
+ *  @License : The MIT License (MIT)
+ *  @Copyright : (c) 2013-2016 Madhu Geejagaru Balakrishna <me@madhugb.com>
+ *  @Source : http://flubber.co
+ *
+ */
 define('FLIB', dirname(__FILE__).'/');
 define('FLVERSION', 2.0);
 

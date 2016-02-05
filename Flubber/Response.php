@@ -1,6 +1,16 @@
 <?php
 namespace Flubber;
-
+/**
+ *
+ *  Response Handler
+ *
+ *
+ *  @Author  : Madhu Geejagaru Balakrishna <me@madhugb.com>
+ *  @License : The MIT License (MIT)
+ *  @Copyright : (c) 2013-2016 Madhu Geejagaru Balakrishna <me@madhugb.com>
+ *  @Source : http://flubber.co
+ *
+ */
 use Twig_Environment, Twig_Loader_Filesystem,Twig_SimpleFilter;
 
 global $twig_loader, $twig;
