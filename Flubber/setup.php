@@ -122,14 +122,14 @@ function prepare_dirs() {
 		echo "Unable to give full permission to directory. Give the directory write permission before running the setup.";
 		exit;
 	}
-	chown($path, 'www-data');
+
 	mkdir($path."/config", 0777);
 	mkdir($path."/config/locale", 0777);
 	mkdir($path."/handlers", 0777);
 	mkdir($path."/public", 0777);
-	mkdir($path."/js", 0777);
-	mkdir($path."/css", 0777);
-	mkdir($path."/images", 0777);
+	mkdir($path."/public/js", 0777);
+	mkdir($path."/public/css", 0777);
+	mkdir($path."/public/images", 0777);
 	mkdir($path."/views", 0777);
 	mkdir($path."/views/templates", 0777);
 }
@@ -148,7 +148,7 @@ include_once '%sAutoload.php';
 \$flubberapp = new Flubber\Flubber(\$config);
 \$flubberapp->start();
 
-?>", $FlubberPath, $path);
+?>", $FlubberPath, $path.'/');
 	file_put_contents($path."/public/index.php", $index);
 
 	$config_content = get_sample_config($config);
@@ -224,12 +224,22 @@ class Home extends BaseHandler {
 </html>";
 	file_put_contents($path."/views/templates/base.html", $base_html);
 
-	$home_html = "{% extends 'core_body.html' %}
+	$home_html = "{% extends 'base.html' %}
 {% block body %}
 	<h1>{{message|_s}}</h1>
-	<span> anything with { { variable | _s } } will get the value from locale file in /config/locale.</span>
+	<p>
+		`| _s` is special Twig templating filter syntax) <br>
+		So `{ { variable | _s } }` will get the value from locale file with value of `variable` in /config/locale.<br>
+		in this case this will be replaced like below { { 'hello' | _s } }<br>
+	</p>
+
 {% endblock %}";
 	file_put_contents($path."/views/templates/home.html", $home_html);
+
+	$en_locale = ";English locale strings
+flubber = \"Flubber\"
+hello = \"Hello World!\"";
+	file_put_contents($path."/config/locale/en.ini", $en_locale);
 }
 
 logger("Starting Installation");
@@ -240,7 +250,7 @@ logger("Flubber Path : ".$FlubberPath);
 
 $config = extract_config_from_cmdline($argv);
 
-//prepare_dirs();
+prepare_dirs();
 create_core_files();
 
 
