@@ -105,7 +105,7 @@ function prepare_dirs() {
 	global $config;
 
 	if (!array_key_exists('PATH', $config)) {
-		echo "Unable to find --path in config.";
+		echo "Please send `--path=/path/to/your/project` \n\tFor example --path=/var/www/example.com";
 		exit;
 	}
 	$path = $config['PATH'];
