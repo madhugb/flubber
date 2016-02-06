@@ -23,5 +23,3 @@ spl_autoload_register('FLAutoloader');
 
 include_once dirname(__FILE__).'/vendors/Twig/Autoloader.php';
 Twig_Autoloader::register();
-
-?>

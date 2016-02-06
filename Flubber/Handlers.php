@@ -25,5 +25,3 @@ class Handlers {
 		array_push($FlubberHandlers, array($pattern,$handler));
 	}
 }
-
-?>

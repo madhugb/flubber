@@ -27,5 +27,3 @@ class FLException extends \Exception {
     }
 
 }
-
-?>

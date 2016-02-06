@@ -104,6 +104,7 @@ class Flubber {
         if (!file_exists(CONFIG_PATH. 'urls.php'))
             throw new FLException("URL handlers not found.
                     Make sure that you have config/urls.php file.");
+
         require CONFIG_PATH. 'urls.php';
 
         // Register all urls for handler
@@ -135,8 +136,7 @@ class Flubber {
                 throw new FLException('Not Found', array('status' => 404));
             }
             $module = gethandler($FLRequest->handler);
-            call_user_func_array(
-                    array($module, $FLRequest->method), $FLRequest->params);
+            call_user_func_array(array($module, $FLRequest->method), $FLRequest->params);
 
         } catch (FLException $e) {
 
@@ -155,9 +155,8 @@ class Flubber {
         } catch (\Exception $e) {
             echo $e->getmessage();
         } finally {
-            return true;
+            return;
         }
     }
 }
 
-?>

@@ -34,5 +34,3 @@ class ErrorHandler extends BaseHandler {
 	}
 
 }
-
-?>
