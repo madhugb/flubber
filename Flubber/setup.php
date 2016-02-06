@@ -159,7 +159,7 @@ include_once '%sAutoload.php';
  * Add your custom functions here
  */
 
-?>";
+";
 	file_put_contents($path."/config/function.php", $functions);
 
 
@@ -182,7 +182,7 @@ include_once '%sAutoload.php';
 
 );
 
-?>";
+";
 	file_put_contents($path."/config/urls.php", $urls);
 
 	$home_handler = "<?php
@@ -211,7 +211,7 @@ class Home extends BaseHandler {
 	}
 }
 
-?>";
+";
 	file_put_contents($path."/handlers/Home.php", $home_handler);
 
 	$base_html = "<html>
