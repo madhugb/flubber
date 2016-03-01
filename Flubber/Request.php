@@ -28,9 +28,10 @@ class Request {
     public $body = '';
 
     public $data =  array(
-        'post' => array(),
         'get' => array(),
+        'post' => array(),
         'put' => array(),
+        'patch' => array(),
         'delete' => array());
 
     public $csrf_check = true;
@@ -65,7 +66,7 @@ class Request {
             $this->data['files'] = $_FILES;
         }
         // other type of requests may need special formatting
-        if (in_array($this->method, ['post', 'put', 'delete'])) {
+        if (in_array($this->method, ['post', 'put', 'delete','patch'])) {
             $type = explode(";", $this->headers['Content-Type'])[0];
 
             switch($type) {
