@@ -49,17 +49,22 @@ class Locale {
      * Register strings for a new language
      */
     function register($lang, $strings) {
+
         $this->strings[$lang] = $strings;
+
     }
 
     /*
      * Set locale for the current session
      */
     function set_locale($lang) {
-        if (isset($this->languages[$lang]) && isset($this->strings[$lang])) {
-            $this->locale  = $lang;
+
+        if (isset($this->languages[$lang]) &&
+                isset($this->strings[$lang])) {
+            $this->locale = $lang;
         } else {
             $this->locale = "en";
+
         }
     }
 
