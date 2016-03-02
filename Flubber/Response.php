@@ -84,23 +84,30 @@ class Response {
     }
 
     function set_header($name, $value='') {
-        if (!in_array($name, $this->headers)) array_push($this->headers, $name);
+
+        if (!array_key_exists($name, $this->headers))
+            $this->headers[$name] = "";
         $this->headers[$name] = $value;
+
     }
 
     function set_headers($headers=array()) {
+
         foreach($headers as $key => $value) {
             $this->set_header($key, $value);
         }
+
     }
 
     function render_headers() {
         foreach($this->headers as $header => $value) {
             header($header. ": ". $value);
         }
+
     }
 
     function respond() {
+
         $this->render_headers();
         if ($this->template == 'JSON') {
             echo json_encode($this->data);
@@ -111,6 +118,7 @@ class Response {
             echo $content->render($this->data);
         }
         return true;
+
     }
 }
 
