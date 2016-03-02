@@ -20,16 +20,33 @@ class BaseHandler {
 
     protected $request_method = 'get';
 
+    protected $domain = null;
+
+    protected $cors = array(
+        'allowCors' => true,
+        'maxAge' => 86400, // 1 day
+        'allowCredentials' => 'true',
+        'allowedHeaders' => array("X-Requested-With"),
+        'allowedOrigins' => array("http://flubber.co"),
+        'allowedMethods' => array("GET", "POST", "PUT",
+                                "PATCH", "DELETE", "OPTIONS")
+    );
+
     protected $datastore = null;
 
     protected $response_status = null;
 
     protected $headers = array();
 
+    protected $locale = "en";
+
     protected $session = null;
 
     function __construct($args=array()) {
+
         global $datastore, $FLRequest, $FLSession;
+        $this->domain = ( HAS_SSL ? "https://" : "http://") + SITEURL;
+
         $this->datastore = $datastore;
         $this->session = $FLSession;
 
@@ -40,8 +57,12 @@ class BaseHandler {
                             array('status' => 500));
         }
 
+        if (isset($args['cors'])) {
+            $this->cors = $args['cors'];
+        }
+
         if (isset($args['auth']) && count($args['auth']) > 0) {
-            if (in_array($this->request->method,$args['auth']) &&
+            if (in_array($this->request->method, $args['auth']) &&
                 !$this->is_authenticated()) {
                 relocate(LOGIN_URI);
             }
@@ -50,7 +71,14 @@ class BaseHandler {
         if (isset($args['csrf_check'])) {
             $this->request->csrf_check = $args['csrf_check'];
         }
+
+        if (isset($args['locale'])) {
+            $this->locale = $args['locale'];
+        }
+
         $this->init_csrf();
+        $this->set_default_headers();
+
     }
 
     function is_authenticated() {
@@ -63,31 +91,82 @@ class BaseHandler {
     private function init_csrf() {
 
         if ( $this->request->csrf_check &&
-                in_array($this->request->method, ['post','put']) ) {
+                in_array($this->request->method, ['post','put','patch']) ) {
 
             $token = "";
             if (isset($this->request->headers['X-Csrf-Token'])) {
                 $token = $this->request->headers['X-Csrf-Token'];
             }
 
-            if (isset($this->request->data['post']['_csrf'])) {
+            if ($this->request->method == 'post' &&
+                    isset($this->request->data['post']['_csrf'])) {
                 $token = $this->request->data['post']['_csrf'];
+            }
+
+            if ($this->request->method == 'put' &&
+                    isset($this->request->data['put']['_csrf'])) {
+                $token = $this->request->data['put']['_csrf'];
+            }
+
+            if ($this->request->method == 'patch' &&
+                    isset($this->request->data['patch']['_csrf'])) {
+                $token = $this->request->data['patch']['_csrf'];
             }
 
             $valid = validate_csrf($token);
             if ( $valid ) {
                 return true;
             }
+
         } else {
             return true;
         }
+
         throw new FLException('CSRF Token Invalid.',
-                    array('status' => 403));
+                                array('status' => 403));
+
     }
 
+    function set_default_headers() {
+
+        if (isset($this->request->headers['Origin'])) {
+
+            $origin = $this->request->headers['Origin'];
+
+            if ($this->cors['allowCors'] &&
+                    ($this->cors['allowedOrigins'] == "*" or
+                        in_array($origin, $this->cors['allowedOrigins']))) {
+                $this->headers["Access-Control-Allow-Origin"] = $origin;
+                $this->headers["Access-Control-Allow-Credentials"] = $this->cors['allowCredentials'];
+                $this->headers["Access-Control-Max-Age"] = $this->cors['maxAge'];
+
+            }
+        }
+    }
+
+    /*
+     * Handle preflight requests as exception
+     */
     function options() {
-        throw new FLException('Method Not Allowed.',
-                    array('status' => 405));
+        if ($this->cors['allowCors'] && isset($this->request->headers['Origin'])) {
+
+            $origin = $this->request->headers['Origin'];
+            if (in_array("*",$this->cors['allowedOrigins']) or
+                    in_array($origin, $this->cors['allowedOrigins'])) {
+
+                http_response_code(200);
+                header("Access-Control-Allow-Origin: ". $origin);
+
+                $methods = implode(",", $this->cors["allowedMethods"]);
+                header("Access-Control-Allow-Methods: ". $methods);
+
+                $headers = implode(",", $this->cors['allowedHeaders']);
+                header("Access-Control-Allow-Headers: ". $headers);
+            }
+        } else{
+            http_response_code(405);
+        }
+        exit(0);
     }
 
     function get() {
@@ -114,7 +193,8 @@ class BaseHandler {
             $template,
             $data = array()) {
 
-        $response = new Response($template, $data);
+        $response = new Response($template, $data,
+                            array("locale" => $this->locale));
         if (isset($this->response_status)) {
             $response->set_status($this->response_status);
         }
@@ -127,7 +207,8 @@ class BaseHandler {
     }
 
     function send_json( $data = '') {
-        $response = new Response('JSON', $data);
+        $response = new Response('JSON', $data,
+                            array("locale" => $this->locale));
         $response->set_header('Content-Type','application/json; charset=UTF-8;');
 
         if (isset($this->response_status)) {
@@ -142,7 +223,8 @@ class BaseHandler {
     }
 
     function send_response($data = "") {
-        $response = new Response('TEXT', $data);
+        $response = new Response('TEXT', $data,
+                            array("locale" => $this->locale));
         $response->set_header('Content-Type','text/html; charset=UTF-8;');
 
         if (isset($this->response_status)) {
