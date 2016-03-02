@@ -3,8 +3,8 @@
 Flubber 2.0 is built from ground up, while keeping the same principles of 1.0
 
 ------
-
 ##Create project
+------
 
     cd ~/path/to/Flubber
 
@@ -13,8 +13,9 @@ Flubber 2.0 is built from ground up, while keeping the same principles of 1.0
 It creates a minimal folder structure for you to get started.
 
 ------
-
 ##Folder structure
+------
+
 ```
 your/application/path/
 |
@@ -24,7 +25,7 @@ your/application/path/
 |		|		|
 |		|		|----en.ini
 |		|		|
-|		|		|----<lang>.ini
+|		|		|----<some_lang>.ini
 |		|
 |		|----config.php
 |		|
@@ -53,6 +54,7 @@ your/application/path/
 ```
 
 ------
+
 ##Configurations
 ------
 
@@ -61,17 +63,17 @@ To configure Flubber application you need to provide the following
 `SITEURL`	- url without protocol (i.e http:// , https:// )
 
 	Example:
-		'demo.example.com'
-		'example.com'
-		'test.domain.example.com'
+		"demo.example.com"
+		"example.com"
+		"test.domain.example.com"
 
 `HAS_SSL`	-  false | true
 
-`SITEADMIN` - 'admin@example.com'
+`SITEADMIN` - "admin@example.com"
 
-`TIMEZONE` -  'Asia/Kolkata'
+`TIMEZONE` -  "Asia/Kolkata"
 
-`SESSION_NAME` - '__ses'
+`SESSION_NAME` - "__ses"
 
 `SESSION_EXPIRY` -  3600  // in seconds
 
@@ -82,9 +84,9 @@ To configure Flubber application you need to provide the following
 `LOGIN_URI` - path to login url if exists
 
 	Example:
-		'/login'
-		'/app/login'
-		'/'
+		"/login"
+		"/app/login"
+		"/"
 
 `TOKEN_SECRET` - A long random string for csrf token secret
 				make sure to put a long random string.
@@ -92,19 +94,20 @@ To configure Flubber application you need to provide the following
 `TOKEN_EXPIRY` - 300 // in seconds
 
 
-`DBTYPE` - 'mysql' // for now only mysql is supported
+`DBTYPE` - "mysql" // for now only mysql is supported
 
-`DBHOST` - 'localhost'
+`DBHOST` - "localhost"
 
-`DBUSER` - 'dbusername'
+`DBUSER` - "dbusername"
 
-`DBPASS` - 'dbpassword'
+`DBPASS` - "dbpassword"
 
-`DBNAME` - 'databasename'
+`DBNAME` - "databasename"
 
 ------
 
 ##Urls
+------
 
 `/config/urls.php` contains all url patterns for the application
 
@@ -116,9 +119,9 @@ each index of url
 
 		array(
 
-			'<regex_pattern>',
+			"<regex_pattern>",
 
-			'HandlerName'
+			"HandlerName"
 
 		),
 
@@ -130,9 +133,9 @@ For example:
 
 	array(
 
-		'/^login$/',
+		"/^login$/",
 
-		'LoginHandler'
+		"LoginHandler"
 
 	)
 
@@ -142,20 +145,21 @@ the request is passed to `LoginHandler`.
 
 	array(
 
-		'/^user\/(?P<user_id>[0-9]+)$',
+		"/^user\/(?P<user_id>[0-9]+)$",
 
-		'UserHandler'
+		"UserHandler"
 	)
 
 which translates to if the url is `http://example.com/user/123`
 
-the request is passed to `UserHandler` with an argument `$user_id = '123'`
+the request is passed to `UserHandler` with an argument `$user_id = "123"`
 
 See Hander tutorial below for more details
 
 ------
 
 ##Handlers
+------
 
 You will be spending more time here; as your application logic is written here.
 
@@ -173,9 +177,9 @@ take a look at a sample `UserHandler` handler
 
 			parent::__construct(array(
 
-					'auth' => array( 'get', 'post'),
+					"auth" => array( "get", "post"),
 
-					'csrf_check' => false
+					"csrf_check" => false
 				)
 			);
 		}
@@ -186,16 +190,16 @@ take a look at a sample `UserHandler` handler
 
 			// Composre your response here
 
-			$response = array( 'message' => 'hello');
+			$response = array( "message" => "hello");
 
 			// Show `home` template
 
-			$this->show_page('home', $response);
+			$this->show_page("home", $response);
 		}
 
 		function post() {
 
-			$data = $this->request->data['post'];
+			$data = $this->request->data["post"];
 
 			// send the same data back
 
@@ -208,8 +212,8 @@ take a look at a sample `UserHandler` handler
 Let us see how this handler work
 
 ------
-
 ####Class Structure
+------
 
 Every handler must be extended to `BaseHandler`
 Apart from extending we must call the `parent constructor` in the constructor of
@@ -228,9 +232,9 @@ parent constructor in an array.
 
 Configurations are as below
 
-1. `auth` - this sets the authentication check for 'get', 'post', 'put' requests
+1. `auth` - this sets the authentication check for "get", "post", "put" requests
 
-		$config['auth'] = array('post','put');
+		$config["auth"] = array("post","put");
 
     which checks for authentication for **post** and **put** requests.
     If not authenticated it will redirect to login page
@@ -245,8 +249,8 @@ Configurations are as below
     b. `_csrf` in **post** or **put** data
 
 ------
-
 ####Accessing request data
+------
 
 To handle different request methods you need to have function by
 the name of request methods. Allowed methods are `GET`, `POST`,
@@ -258,9 +262,9 @@ handler (note that the function names are in lowercase).
 In every handler you can access `$this->request` object which contains
 all request data.
 
-1. `$this->request->get('key')`  - value of `GET` argument _key_.
+1. `$this->request->get("key")`  - value of `GET` argument _key_.
 
-2. `$this->request->post('key')` - value of `POST` data _key_.
+2. `$this->request->post("key")` - value of `POST` data _key_.
 
 
 Or you can access `$this->request->data`  directly which has
@@ -268,23 +272,23 @@ Or you can access `$this->request->data`  directly which has
 
 	array(
 
-		'get' => array(
+		"get" => array(
 
-			'get_data_key_1' => 'get_data_value_1'
-
-			...
-		),
-
-		'post' => array(
-
-			'post_data_key_1' => 'post_data_value_1'
+			"get_data_key_1" => "get_data_value_1"
 
 			...
 		),
 
-		'put' => array(),
+		"post" => array(
 
-		'files' => array()
+			"post_data_key_1" => "post_data_value_1"
+
+			...
+		),
+
+		"put" => array(),
+
+		"files" => array()
 	)
 
 
@@ -294,9 +298,9 @@ This can be accessed from `$this->request->params` will get
 
 all the values from url path based on **_named regex_** match.
 
-For example '/^user\/(?P<user_id>[0-9]+)$' will match _http://example.com/user/123_
+For example "/^user\/(?P<user_id>[0-9]+)$" will match _http://example.com/user/123_
 
-and `$this->request->params['user_id']` contains value _123_
+and `$this->request->params["user_id"]` contains value _123_
 
 also you can access this from function argument like below
 
@@ -306,15 +310,15 @@ also you can access this from function argument like below
 	}
 
 ------
-
 ####Response Handling
+------
 
 You can respond by showing a template file or sending a json response.
 
 to show a template page
 
 ```php
-$this->show_page('template_name', $data);
+$this->show_page("template_name", $data);
 ```
 
 where _$data_ is array of data to be used in template
@@ -331,8 +335,8 @@ find more detail about Templates  below
 
 
 ------
-
 ####Headers
+------
 
 To access request headers
 ```php
@@ -341,14 +345,14 @@ $this->request->headers;
 
 To respond with headers the below functions will help
 ```php
-$this->set_status(200); // sets status to '200 OK'
+$this->set_status(200); // sets status to "200 OK"
 
-$this->headers['X-My-Custom-Header'] = 'Some Value'; // will sets the header
+$this->headers["X-My-Custom-Header"] = "Some Value"; // will sets the header
 ```
 
 ------
-
 ####Session Handling
+------
 
 Flubber Session is identified based on Cookie. Cookie name can be
 changed from config `SESSION_NAME`
@@ -360,7 +364,7 @@ $this->session->start();
 
 One must set a session identifier `uid` after starting session
 ```php
-$this->session->set('uid', '<unique id for the user>');
+$this->session->set("uid", "<unique id for the user>");
 ```
 To destroy a session
 ```php
@@ -368,9 +372,8 @@ $this->session->destroy();
 ```
 
 ------
-
 ##Templates
-
+------
 
 Flubber uses `Twig` templating library for rendring html templates
 
@@ -385,14 +388,46 @@ Flubber uses a wrapper method to Twig the APIs are listed below
 As we have shown before to show a template page you can call
 
 ```php
-$this->show_page('<template file name>', $response);
+$this->show_page("<template file name>", $response);
 ```
 Read Twig documentation for more details
 
 ------
-
 ##Localization
+------
 
 language files are located in `config/locale/` directory of your app
 
-each language should have a different file
+each language should have a dedicated `ini` file, which should contain all the strings
+
+for example :
+
+```
+;en.ini
+hello="Hello World!"
+flubber="Flubber"
+flubber_url="http://Flubber.co"
+```
+
+To set a locale for your handler in constructor
+
+```
+	<?php
+
+	...
+
+	class UserHandler extends BaseHandler {
+
+		function __construct() {
+			parent::__construct();
+
+			// Get locale from session / cookie /  db or hard code
+			//  $mylocale = "en";
+			$this->locale = $mylocale;
+
+		}
+
+		...
+
+	}
+```
