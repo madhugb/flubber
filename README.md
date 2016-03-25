@@ -5,19 +5,26 @@ Flubber 2.0 is built from ground up, while keeping the same principles of 1.0
 ------
 ##Create project
 ------
-    cd ~/path/to/Flubber
 
-    php setup.php --path=/var/www/example --url=example.com
+Download Flubber from `https://github.com/madhugb/flubber/archive/master.zip`
 
-It creates a minimal folder structure for you to get started.
+    cd ~/
+
+    wget https://github.com/madhugb/flubber/archive/master.zip
+
+After extracting the zip file, move `Flubber` folder to
+
+    cd ~/flubber
+
+    mv Flubber ~/.Flubber
+
+To start working you need to run this
+
+    php ~/.Flubber/setup.php --path=/var/www/example --url=example.com
+
+It creates a folder structure for you to in `/var/www/example`.
 
 Note : This needs you to have full write access to the path of the project and Flubber codebase
-
-Download Flubber from `https://bitbucket.org/madospace/flubber-v2/get/master.zip`
-
-
-
-it to `~/.Flubber/`
 
 ------
 ##Folder structure
