@@ -119,9 +119,7 @@ each index of url
 
 		array(
 
-			"<regex_pattern>",
-
-			"HandlerName"
+			"<regex_pattern>", "HandlerName"
 
 		),
 
@@ -133,9 +131,7 @@ For example:
 
 	array(
 
-		"/^login$/",
-
-		"LoginHandler"
+		"/^login$/", "LoginHandler"
 
 	)
 
@@ -145,16 +141,12 @@ the request is passed to `LoginHandler`.
 
 	array(
 
-		"/^user\/(?P<user_id>[0-9]+)$",
-
-		"UserHandler"
+		"/^user\/(?P<user_id>[0-9]+)$", "UserHandler"
 	)
 
 which translates to if the url is `http://example.com/user/123`
 
 the request is passed to `UserHandler` with an argument `$user_id = "123"`
-
-See Hander tutorial below for more details
 
 ------
 
@@ -219,13 +211,13 @@ Every handler must be extended to `BaseHandler`
 Apart from extending we must call the `parent constructor` in the constructor of
 the handler.
 
-	function __construct() {
+function __construct() {
 
-		$config = array();
+	$config = array();
 
-		parent::__construct($config);
+	parent::__construct($config);
 
-	}
+}
 
 There are some things you can configure per handler those should be passed to
 parent constructor in an array.
@@ -411,23 +403,13 @@ flubber_url="http://Flubber.co"
 
 To set a locale for your handler in constructor
 
-```
-	<?php
-
+```php
+function __construct() {
 	...
 
-	class UserHandler extends BaseHandler {
+	// Get locale from session / cookie /  db or hard code
+	//  $mylocale = "en";
+	$this->locale = $mylocale;
+}
 
-		function __construct() {
-			parent::__construct();
-
-			// Get locale from session / cookie /  db or hard code
-			//  $mylocale = "en";
-			$this->locale = $mylocale;
-
-		}
-
-		...
-
-	}
 ```
