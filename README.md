@@ -118,6 +118,51 @@ To configure Flubber application you need to provide the following
 
 `DBNAME` - "databasename"
 
+
+-----
+
+##Nginx
+-----
+
+```
+ server {
+
+    listen 80;
+
+    server_name flubber.co;
+
+    root /var/www/example/public/;
+
+    index index.php index.html;
+
+    location / {
+
+        try_files $uri $uri/ /index.php?$args;
+
+    }
+
+    location ~ \.php$ {
+
+        try_files $uri =404;
+
+        include /etc/nginx/fastcgi_params;
+
+        fastcgi_pass unix:/var/run/php5-fpm.sock;
+
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+
+        fastcgi_index index.php;
+
+        proxy_buffer_size   128k;
+
+        proxy_buffers   4 256k;
+
+        proxy_busy_buffers_size   256k;
+
+    }
+
+}
+```
 ------
 
 ##Urls
