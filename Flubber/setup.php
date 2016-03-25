@@ -34,7 +34,7 @@ function logger($str) {
 function extract_config_from_cmdline($arguments) {
 	global $config_keys;
 	$config = array();
-	$re = "/^--([a-z]+)\\=(.*)$/m";
+	$re = "/^--([a-z\_]+)\\=(.*)$/m";
 	foreach ($arguments as $key => $value) {
 		if (preg_match_all($re, $value, $matches)) {
 			if (!isset($matches[1])) continue;
@@ -95,6 +95,9 @@ define('DBNAME', '__DB_NAME__');
 			$subst = $config[$key];
 		} else {
 			$subst = $default;
+		}
+		if ($key == 'TOKEN_SECRET'){
+			$subst = hash('sha256', $subst);
 		}
 		$template = preg_replace($re, $subst, $template);
 	}
